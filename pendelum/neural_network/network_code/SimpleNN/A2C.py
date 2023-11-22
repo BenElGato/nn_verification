@@ -5,7 +5,7 @@ import torch.optim as optim
 import numpy as np
 import gym
 import matplotlib.pyplot as plt
-from mountaincar.neural_network.custom_environments import custum_wrapper_energy_function as wrapper
+from pendelum.neural_network.custom_environments import reward_positive_x as wrapper
 import math
 class GenericNetwork(nn.Module):
     def __init__(self, lr, input_dims, fc1_dims, fc2_dims, n_actions):
@@ -67,9 +67,8 @@ class Agent(object):
         (actor_loss + critic_loss).backward()
         self.actor.optimizer.step()
         self.critic.optimizer.step()
-def run_trained_model(alpha, beta, input_dims, gamma, layer1_size, layer2_size, folder, n_actions=2, num_episodes=100):
-    env = gym.make('MountainCarContinuous-v0', render_mode="human")
-    env = wrapper.CustomMountainCarRewardWrapper(env)
+def run_trained_model(alpha, beta, input_dims, gamma, layer1_size, layer2_size, folder, environment, n_actions=2, num_episodes=100):
+    env = wrapper.CustomMountainCarRewardWrapper(gym.make(environment, render_mode="human"))
     agent = Agent(alpha=alpha, beta = beta, input_dims=input_dims, gamma=gamma, layer1_size=layer1_size, layer2_size=layer2_size, epsilon=0.1)
     agent.actor.load_state_dict(T.load(f'{folder}/actor_weights.pth'))
     agent.critic.load_state_dict(T.load(f'{folder}/critic_weights.pth'))
@@ -88,13 +87,12 @@ def run_trained_model(alpha, beta, input_dims, gamma, layer1_size, layer2_size, 
         print('episode ', i, ' score %.2f' % score)
 
     env.close()
-def train(alpha, beta, input_dims, gamma, layer1_size, layer2_size, folder, num_episodes=100):
+def train(alpha, beta, input_dims, gamma, layer1_size, layer2_size, folder, environment, num_episodes=100):
     agent = Agent(alpha=alpha, beta = beta, input_dims=input_dims, gamma=gamma, layer1_size=layer1_size, layer2_size=layer2_size, epsilon=0.5)
     #agent.actor.load_state_dict(T.load(f'{folder}/actor_weights.pth'))
     #agent.critic.load_state_dict(T.load(f'{folder}/critic_weights.pth'))
     #env = gym.make('MountainCarContinuous-v0', render_mode="human")
-    env = gym.make('MountainCarContinuous-v0')
-    env = wrapper.CustomMountainCarRewardWrapper(env)
+    env = wrapper.CustomMountainCarRewardWrapper(gym.make(environment))
     score_history = []
     for i in range(num_episodes):
         done = False
@@ -123,6 +121,8 @@ def train(alpha, beta, input_dims, gamma, layer1_size, layer2_size, folder, num_
     plt.ylabel('Y-axis Label')
     plt.title('Line Plot of Floats')
     plt.savefig('my_plot.png')
-folder = "/home/elgato/nn_verification/mountaincar/neural_network/network_code"
-train(alpha=1e-5, beta = 1e-5, input_dims=[2], gamma=0.99, layer1_size=256, layer2_size=256, num_episodes=100, folder = folder)
-run_trained_model(alpha=0.005, beta = 0.001, input_dims=[2], gamma=0.99, layer1_size=256, layer2_size=256, num_episodes=200, folder = folder)
+environment = 'Pendulum-v1'
+folder = "/home/elgato/nn_verification/pendelum/neural_network/network_code/SimpleNN"
+input_dims = gym.make(environment).observation_space.shape
+train(alpha=1e-5, beta = 1e-5, input_dims=input_dims, gamma=0.99, layer1_size=256, layer2_size=256, num_episodes=200, folder = folder, environment=environment)
+run_trained_model(alpha=0.005, beta = 0.001, input_dims=input_dims, gamma=0.99, layer1_size=256, layer2_size=256, num_episodes=200, folder = folder, environment=environment)
