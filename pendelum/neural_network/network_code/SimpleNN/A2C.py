@@ -124,5 +124,5 @@ def train(alpha, beta, input_dims, gamma, layer1_size, layer2_size, folder, envi
 environment = 'Pendulum-v1'
 folder = "/home/elgato/nn_verification/pendelum/neural_network/network_code/SimpleNN"
 input_dims = gym.make(environment).observation_space.shape
-train(alpha=1e-5, beta = 1e-5, input_dims=input_dims, gamma=0.99, layer1_size=256, layer2_size=256, num_episodes=200, folder = folder, environment=environment)
+train(alpha=1e-5, beta = 1e-5, input_dims=input_dims, gamma=0.99, layer1_size=256, layer2_size=256, num_episodes=2000, folder = folder, environment=environment)
 run_trained_model(alpha=0.005, beta = 0.001, input_dims=input_dims, gamma=0.99, layer1_size=256, layer2_size=256, num_episodes=200, folder = folder, environment=environment)
