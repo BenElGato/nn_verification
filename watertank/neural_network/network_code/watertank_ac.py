@@ -5,6 +5,7 @@ import numpy as np
 from dm_control.rl import control
 from dm_control.rl.control import Environment
 from dm_env import specs
+import matplotlib.pyplot as plt
 
 
 
@@ -37,7 +38,7 @@ class Physics(control.Physics):
         """Resets environment physics"""
         self._state = self._init_state
         self._time = 0.
-        self._action =  np.asarray([0.])
+        self._action = np.asarray([0.])
 
     def after_reset(self):
        pass
@@ -56,7 +57,7 @@ class Physics(control.Physics):
 
     def _F(self):
         """ Returns Physical RHS for ODE d state / dt = F(state, action) """
-        return -self._alpha*np.sqrt(self._state) - self._action
+        return -self._alpha*np.sqrt(self._state) + self._action
 
     def time(self):
         """Returns total elapsed simulation time"""
@@ -93,25 +94,19 @@ class Step(control.Task):
 
     def __init__(self,
                  maxinflow: float,
-                 h_goal1: float,
-                 h_goal2: float,
-                 t_step: float,
+                 h_goal: float,
                  precision: float,
                  ):
         """Initialize Step task
 
         Parameters:
             maxinflow: max control inflow
-            h_goal1: [m] target height 1st time interval
-            h_goal2: [m] target height 2nd time interval
-            t_step:  [s] switching time instant 1st->2nd target
+            h_goal: [m] target height 1st time interval
             precision: [m] desired precision on h target
 
         """
         self._maxinflow = maxinflow
-        self._h_goal1 = h_goal1
-        self._h_goal2 = h_goal2
-        self._t_step = t_step
+        self._h_goal = h_goal
         self._precision = precision
 
 
@@ -119,26 +114,23 @@ class Step(control.Task):
         """ Reset physics for the task """
         physics.reset()
 
-    def get_reference(self, physics):
+    def get_reference(self):
         """Returns target reference"""
-        if physics.time() < self._t_step:
-            target = self._h_goal1
-        else:
-            target = self._h_goal2
-        return target
+        return self._h_goal
+
 
     def get_observation(self, physics):
         """Returns specific observation for the task"""
         # Let the actor observe the reference and the state
         return np.concatenate((
-            [self.get_reference(physics)],
+            [self.get_reference()],
             physics.get_state()
         ))
 
     def get_reward(self, physics):
         """Returns the reward given the physical state """
         sigma = self._precision
-        mean = self.get_reference(physics)
+        mean = self.get_reference()
         # Gaussian like rewards on target water level h
         return np.exp(
             -np.power(physics.get_state()[0] - mean, 2.) / (2 * np.power(sigma, 2.))
@@ -162,6 +154,11 @@ class Step(control.Task):
             minimum=0.,
             maximum=self._maxinflow,
             name='action')
+
+
+
+
+
 # Define the Actor network for continuous action space
 
 class ActorNetwork(nn.Module):
@@ -190,7 +187,7 @@ class CriticNetwork(nn.Module):
         return value
 
 class ActorCriticAgentContinuous:
-    def __init__(self, state_dim, action_dim, hidden_dim=128, lr_actor=0.000001, lr_critic=0.000001):
+    def __init__(self, state_dim, action_dim, hidden_dim=128, lr_actor=0.0001, lr_critic=0.0001):
         self.actor = ActorNetwork(state_dim, action_dim, hidden_dim)
         self.critic = CriticNetwork(state_dim, action_dim, hidden_dim)
         self.optimizer_actor = optim.Adam(self.actor.parameters(), lr=lr_actor)
@@ -248,9 +245,7 @@ physics = Physics(
 )
 task = Step(
     maxinflow=5.,
-    h_goal1=1.,
-    h_goal2=0.8,
-    t_step=1.,
+    h_goal=1.,
     precision=0.05,
 )
 environment = Environment(
@@ -269,14 +264,14 @@ action_dimensions = action_spec.shape[0]
 agent_continuous = ActorCriticAgentContinuous(state_dimensions, action_dimensions)
 
 # Training loop
-import matplotlib.pyplot as plt
-
-# Training loop
 num_episodes = 1000
-max_steps_per_episode = 100
+max_steps_per_episode = 200
 
-controls_over_time = []
-precision_over_time = []# To store control actions for visualization
+controls_over_time = [] # To store control actions for visualization
+precision_over_time = []
+observations_over_time = []  # To store observations for visualization
+rewards_over_time = []
+
 
 for episode in range(num_episodes):
     physics.reset()
@@ -286,10 +281,11 @@ for episode in range(num_episodes):
 
     for step in range(max_steps_per_episode):
         state = task.get_observation(physics)
+        observations_over_time.append(state[0])
         action = agent_continuous.select_action(state)
         task.before_step(action, physics)
 
-        # Assuming that your environment has a different structure for step
+
         physics.step()
 
         next_state = task.get_observation(physics)
@@ -302,6 +298,8 @@ for episode in range(num_episodes):
 
         controls_over_time.append(action)# Store control actions for visualization
         precision_over_time.append(task._precision)
+        rewards_over_time.append(reward)
+
 
         if step == max_steps_per_episode - 1:
             # If we reached the maximum number of steps, consider the episode terminated
@@ -322,6 +320,7 @@ for episode in range(num_episodes):
         agent_continuous.update_actor(np.vstack(episode_states), np.array(episode_actions), advantages)
 
 # Visualize controls over time
+
 fig, ax1 = plt.subplots()
 
 color = 'tab:red'
@@ -339,36 +338,43 @@ ax2.tick_params(axis='y', labelcolor=color)
 
 fig.tight_layout()  # ensure that the two y-axis labels don't overlap
 
-plt.savefig('precision&actions_over_time_changed.png')
+plt.savefig('controls&precision_over_timev4.png')
 plt.show()
 
-torch.save(agent_continuous.actor.state_dict(), 'wtenvactor_weights.pth')
+# Save the third plot (Rewards over Time)
+fig, ax = plt.subplots()
+ax.plot(rewards_over_time, color='purple')
+ax.set_xlabel('Time step')
+ax.set_ylabel('Rewards', color='purple')
+ax.set_title('Rewards over Time')
+fig.tight_layout()
+plt.savefig('rewards_over_timev4.png')
+plt.show()
 
-# If applicable, save the weights of the trained critic network
+torch.save(agent_continuous.actor.state_dict(), 'watertankactor_weightsv4.pth')
 
-
-state_dim = state_dimensions  # Replace with the actual state dimension of your environment
+state_dim = state_dimensions
+print(state_dim)
 action_dim = action_dimensions
+print(action_dim)
 hidden_dim = 128
 actor = ActorNetwork(state_dim, action_dim, hidden_dim)
 
 
-# Load the trained weights (replace 'actor_weights.pth' and 'critic_weights.pth' with the actual paths to your saved weights)
-actor.load_state_dict(torch.load('wtenvactor_weights.pth'))
+# Load the trained weights
+actor.load_state_dict(torch.load('watertankactor_weightsv4.pth'))
 
 
 # Set the models to evaluation mode
 actor.eval()
-
 
 # Create dummy input tensors with the appropriate sizes and data types
 dummy_input_actor = torch.randn(1, state_dim)
 dummy_input_critic = torch.randn(1, state_dim)
 
 # Export the Actor model to ONNX format
-onnx_filename_actor = 'wtenvactor_model.onnx'
+onnx_filename_actor = 'watertankactor_modelv4.onnx'
 torch.onnx.export(actor, dummy_input_actor, onnx_filename_actor, verbose=True, opset_version=10)
 print(f"The ONNX actor model has been exported to {onnx_filename_actor}")
-
 
 
