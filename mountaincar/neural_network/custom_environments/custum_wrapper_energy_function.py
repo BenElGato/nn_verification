@@ -12,7 +12,6 @@ class CustomMountainCarRewardWrapper(gym.Wrapper):
         custom_reward = self.custom_reward_function(observation, reward, done)
 
         return observation, custom_reward, terminated, truncated, info
-
     def custom_reward_function(self, state, original_reward, done):
         pos_x = state[0]
         speed = abs(state[1])
