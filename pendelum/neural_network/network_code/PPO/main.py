@@ -8,10 +8,11 @@ import sys
 import torch
 from ppo import PPO
 from network import FeedForwardNN
+from mountaincar.neural_network.custom_environments import custum_wrapper_energy_function as wrapper
 
-def train(env, timesteps_per_batch, max_timesteps_per_episode, gamma,n_updates_per_iteration, lr, clip, actor_model, critic_model, timesteps=200_000_000):
+def train(env, timesteps_per_batch, max_timesteps_per_episode, gamma,n_updates_per_iteration, lr, clip, actor_model, critic_model, name, timesteps=200_000_000):
 	model = PPO(policy_class=FeedForwardNN, env=env, timesteps_per_batch=timesteps_per_batch, max_timesteps_per_episode=max_timesteps_per_episode,
-	gamma=gamma,n_updates_per_iteration=n_updates_per_iteration,lr=lr,clip=clip)
+	gamma=gamma,n_updates_per_iteration=n_updates_per_iteration,lr=lr,clip=clip, name=name)
 
 	# Tries to load in an existing actor/critic model to continue training on
 	if actor_model != '' and critic_model != '':
@@ -51,7 +52,7 @@ def export_onnx(env, actor_model, batchsize):
 	policy.load_state_dict(torch.load(actor_model))
 	dummy_input = torch.randn(batchsize, obs_dim)
 	print(dummy_input.size())
-	onnx_filename = 'actor_model.onnx'
+	onnx_filename = 'actor_model_mountaincar.onnx'
 	torch.onnx.export(policy, dummy_input, onnx_filename, verbose=True)
 
 if __name__ == '__main__':
@@ -67,15 +68,18 @@ if __name__ == '__main__':
 	'''
 	####################################
 	'''
-	env = gym.make('Pendulum-v1')
+	name = 'Pendulum-v1'
+	env = gym.make(name)
 	actor_model = ""
 	critic_model = ""
+
 	'''
 	train(env=env, timesteps_per_batch=timesteps_per_batch, max_timesteps_per_episode=max_timesteps_per_episode,
 			gamma=gamma,n_updates_per_iteration=n_updates_per_iteration,lr=lr,clip=clip,
-		  	actor_model=actor_model, critic_model=critic_model, timesteps=10_000_000)
+		  	actor_model=actor_model, critic_model=critic_model, timesteps=10_000_000, name=name)
 	'''
-	actor_model = "ppo_actor.pth"
-	env = gym.make('Pendulum-v1', render_mode="human")
-	#test(env=env, actor_model=actor_model)
+
+	actor_model = f"{name}ppo_actor.pth"
+	env = gym.make(name, render_mode="human")
+	test(env=env, actor_model=actor_model)
 	export_onnx(env,actor_model=actor_model,batchsize=timesteps_per_batch)

@@ -1,5 +1,5 @@
 import numpy as np
-import gym
+import gymnasium as gym
 import math
 class CustomMountainCarRewardWrapper(gym.Wrapper):
     def __init__(self, env):
@@ -15,12 +15,19 @@ class CustomMountainCarRewardWrapper(gym.Wrapper):
     def custom_reward_function(self, state, original_reward, done):
         pos_x = state[0]
         speed = abs(state[1])
+
         height = np.sin(3 * pos_x) * 0.45 + 0.55
         reward = 100 * ((math.sin(3 * pos_x) * 0.0025 + 0.5 * speed * speed) - (
                     math.sin(3 * self.last_x) * 0.0025 + 0.5 * self.last_speed * self.last_speed))
-        if pos_x >= 0.35:
+        if pos_x >= -0.2:
+            reward += 0.1
+        elif pos_x >= 0.0:
+            reward += 1
+        elif pos_x >= 0.15:
+            reward += 5
+        elif pos_x >= 0.35:
             reward += 10
-        if pos_x >= 0.45:
+        elif pos_x >= 0.45:
             reward += 100000
         self.last_speed = speed
         self.last_x = pos_x

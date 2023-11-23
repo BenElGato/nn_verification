@@ -16,7 +16,7 @@ from torch.distributions import MultivariateNormal
 from network import FeedForwardNN
 
 class PPO:
-	def __init__(self, policy_class, env, timesteps_per_batch, max_timesteps_per_episode, gamma,n_updates_per_iteration, lr, clip):
+	def __init__(self, policy_class, env, timesteps_per_batch, max_timesteps_per_episode, gamma,n_updates_per_iteration, lr, clip, name):
 		'''Hyperparameters ###############################'''
 		self.timesteps_per_batch = timesteps_per_batch  # Number of timesteps to run per batch
 		self.max_timesteps_per_episode = max_timesteps_per_episode  # Max number of timesteps per episode
@@ -24,6 +24,7 @@ class PPO:
 		self.lr = lr  # Learning rate of actor optimizer
 		self.gamma = gamma  # Discount factor to be applied when calculating Rewards-To-Go
 		self.clip = clip  # Recommended 0.2, helps define the threshold to clip the ratio during SGA
+		self.name = name
 
 
 		self.save_freq = 10  # How often we save in number of iterations
@@ -101,8 +102,8 @@ class PPO:
 
 			# Save our model if it's time
 			if i_so_far % self.save_freq == 0:
-				torch.save(self.actor.state_dict(), './ppo_actor.pth')
-				torch.save(self.critic.state_dict(), './ppo_critic.pth')
+				torch.save(self.actor.state_dict(), f'./{self.name}ppo_actor.pth')
+				torch.save(self.critic.state_dict(), f'./{self.name}ppo_critic.pth')
 
 	def collectData(self):
 		"""
