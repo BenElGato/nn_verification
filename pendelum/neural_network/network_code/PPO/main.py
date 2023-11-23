@@ -9,9 +9,9 @@ import torch
 from ppo import PPO
 from network import FeedForwardNN
 
-def train(env, timesteps_per_batch, max_timesteps_per_episode, gamma,n_updates_per_iteration, lr, clip, render, render_every_i, actor_model, critic_model, timesteps=200_000_000):
+def train(env, timesteps_per_batch, max_timesteps_per_episode, gamma,n_updates_per_iteration, lr, clip, actor_model, critic_model, timesteps=200_000_000):
 	model = PPO(policy_class=FeedForwardNN, env=env, timesteps_per_batch=timesteps_per_batch, max_timesteps_per_episode=max_timesteps_per_episode,
-	gamma=gamma,n_updates_per_iteration=n_updates_per_iteration,lr=lr,clip=clip,render=render,render_every_i=render_every_i)
+	gamma=gamma,n_updates_per_iteration=n_updates_per_iteration,lr=lr,clip=clip)
 
 	# Tries to load in an existing actor/critic model to continue training on
 	if actor_model != '' and critic_model != '':
@@ -44,7 +44,14 @@ def test(env, actor_model):
 			observation, info = env.reset()
 
 	env.close()
-
+def export_onnx(env, actor_model, batchsize):
+	obs_dim = env.observation_space.shape[0]
+	act_dim = env.action_space.shape[0]
+	policy = FeedForwardNN(obs_dim, act_dim)
+	policy.load_state_dict(torch.load(actor_model))
+	dummy_input = torch.randn(batchsize, obs_dim)
+	onnx_filename = 'actor_model.onnx'
+	torch.onnx.export(policy, dummy_input, onnx_filename, verbose=True)
 
 if __name__ == '__main__':
 	'''
@@ -56,19 +63,17 @@ if __name__ == '__main__':
 	n_updates_per_iteration = 10
 	lr = 3e-4
 	clip = 0.2
-	render = True
-	render_every_i = 10
 	'''
 	####################################
 	'''
 	env = gym.make('Pendulum-v1')
 	actor_model = ""
 	critic_model = ""
-	'''
 	train(env=env, timesteps_per_batch=timesteps_per_batch, max_timesteps_per_episode=max_timesteps_per_episode,
-	gamma=gamma,n_updates_per_iteration=n_updates_per_iteration,lr=lr,clip=clip,render=render,render_every_i=render_every_i
-		  , actor_model=actor_model, critic_model=critic_model, timesteps=10_000_000)
-	'''
+			gamma=gamma,n_updates_per_iteration=n_updates_per_iteration,lr=lr,clip=clip,
+		  	actor_model=actor_model, critic_model=critic_model, timesteps=10_000_000)
+
 	actor_model = "ppo_actor.pth"
 	env = gym.make('Pendulum-v1', render_mode="human")
 	test(env=env, actor_model=actor_model)
+	export_onnx(env,actor_model=actor_model,batchsize=timesteps_per_batch)

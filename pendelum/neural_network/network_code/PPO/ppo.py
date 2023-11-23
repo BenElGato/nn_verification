@@ -16,7 +16,7 @@ from torch.distributions import MultivariateNormal
 from network import FeedForwardNN
 
 class PPO:
-	def __init__(self, policy_class, env, timesteps_per_batch, max_timesteps_per_episode, gamma,n_updates_per_iteration, lr, clip, render, render_every_i):
+	def __init__(self, policy_class, env, timesteps_per_batch, max_timesteps_per_episode, gamma,n_updates_per_iteration, lr, clip):
 		'''Hyperparameters ###############################'''
 		self.timesteps_per_batch = timesteps_per_batch  # Number of timesteps to run per batch
 		self.max_timesteps_per_episode = max_timesteps_per_episode  # Max number of timesteps per episode
@@ -59,8 +59,6 @@ class PPO:
 		}
 
 	def learn(self, total_timesteps):
-		print(f"Learning... Running {self.max_timesteps_per_episode} timesteps per episode, ", end='')
-		print(f"{self.timesteps_per_batch} timesteps per batch for a total of {total_timesteps} timesteps")
 		t_so_far = 0 # Timesteps simulated so far
 		i_so_far = 0 # Iterations ran so far
 		while t_so_far < total_timesteps:
@@ -71,7 +69,7 @@ class PPO:
 			self.logger['i_so_far'] = i_so_far
 			V, _ = self.evaluate(batch_obs, batch_acts)
 			A_k = batch_rtgs - V.detach()
-			A_k = (A_k - A_k.mean()) / (A_k.std() + 1e-10)
+			A_k = (A_k - A_k.mean()) / (A_k.std() + 1e-10) # Normalize advantages ---> This is an optimization!
 
 			# This is the loop where we update our network for some n epochs
 			for _ in range(self.n_updates_per_iteration):
@@ -121,14 +119,9 @@ class PPO:
 		batch_rews = []
 		batch_rtgs = []
 		batch_lens = []
-
-		# Episodic data. Keeps track of rewards per episode, will get cleared
-		# upon each new episode
 		ep_rews = []
 
 		t = 0 # Keeps track of how many timesteps we've run so far this batch
-
-		# Keep simulating until we've run more than or equal to specified timesteps per batch
 		while t < self.timesteps_per_batch:
 			ep_rews = []
 			obs, info = self.env.reset()
@@ -187,52 +180,17 @@ class PPO:
 		return batch_rtgs
 
 	def get_action(self, obs):
-		"""
-			Queries an action from the actor network, should be called from collectData.
-
-			Parameters:
-				obs - the observation at the current timestep
-
-			Return:
-				action - the action to take, as a numpy array
-				log_prob - the log probability of the selected action in the distribution
-		"""
-		# Query the actor network for a mean action
 		mean = self.actor(obs)
-
-		# Create a distribution with the mean action and std from the covariance matrix above.
 		dist = MultivariateNormal(mean, self.cov_mat)
 		action = dist.sample()
 		log_prob = dist.log_prob(action)
 		return action.detach().numpy(), log_prob.detach()
 
 	def evaluate(self, batch_obs, batch_acts):
-		"""
-			Estimate the values of each observation, and the log probs of
-			each action in the most recent batch with the most recent
-			iteration of the actor network. Should be called from learn.
-
-			Parameters:
-				batch_obs - the observations from the most recently collected batch as a tensor.
-							Shape: (number of timesteps in batch, dimension of observation)
-				batch_acts - the actions from the most recently collected batch as a tensor.
-							Shape: (number of timesteps in batch, dimension of action)
-
-			Return:
-				V - the predicted values of batch_obs
-				log_probs - the log probabilities of the actions taken in batch_acts given batch_obs
-		"""
-		# Query critic network for a value V for each batch_obs. Shape of V should be same as batch_rtgs
 		V = self.critic(batch_obs).squeeze()
-
-		# Calculate the log probabilities of batch actions using most recent actor network.
-		# This segment of code is similar to that in get_action()
 		mean = self.actor(batch_obs)
 		dist = MultivariateNormal(mean, self.cov_mat)
 		log_probs = dist.log_prob(batch_acts)
-
-		# Return the value vector V of each observation in the batch
-		# and log probabilities log_probs of each action in the batch
 		return V, log_probs
 
 	def _log_summary(self):
@@ -247,12 +205,11 @@ class PPO:
 
 		# Print logging statements
 		print(flush=True)
-		print(f"-------------------- Iteration #{i_so_far} --------------------", flush=True)
-		print(f"Average Episodic Return: {avg_ep_rews}", flush=True)
-		print(f"Average actor Loss: {avg_actor_loss}", flush=True)
-		print(f"Timesteps So Far: {t_so_far}", flush=True)
-		print(f"------------------------------------------------------", flush=True)
-		print(flush=True)
+		print(f"-------------------- Iteration #{i_so_far} --------------------\n")
+		print(f"Average Episodic Return: {avg_ep_rews}\n")
+		print(f"Average actor Loss: {avg_actor_loss}\n")
+		print(f"Timesteps So Far: {t_so_far}\n")
+		print(f"------------------------------------------------------\n")
 
 		# Reset batch-specific logging data
 		self.logger['batch_lens'] = []
