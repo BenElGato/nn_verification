@@ -50,6 +50,7 @@ def export_onnx(env, actor_model, batchsize):
 	policy = FeedForwardNN(obs_dim, act_dim)
 	policy.load_state_dict(torch.load(actor_model))
 	dummy_input = torch.randn(batchsize, obs_dim)
+	print(dummy_input.size())
 	onnx_filename = 'actor_model.onnx'
 	torch.onnx.export(policy, dummy_input, onnx_filename, verbose=True)
 
@@ -69,11 +70,12 @@ if __name__ == '__main__':
 	env = gym.make('Pendulum-v1')
 	actor_model = ""
 	critic_model = ""
+	'''
 	train(env=env, timesteps_per_batch=timesteps_per_batch, max_timesteps_per_episode=max_timesteps_per_episode,
 			gamma=gamma,n_updates_per_iteration=n_updates_per_iteration,lr=lr,clip=clip,
 		  	actor_model=actor_model, critic_model=critic_model, timesteps=10_000_000)
-
+	'''
 	actor_model = "ppo_actor.pth"
 	env = gym.make('Pendulum-v1', render_mode="human")
-	test(env=env, actor_model=actor_model)
+	#test(env=env, actor_model=actor_model)
 	export_onnx(env,actor_model=actor_model,batchsize=timesteps_per_batch)
