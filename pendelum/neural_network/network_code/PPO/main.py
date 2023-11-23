@@ -50,10 +50,12 @@ def export_onnx(env, actor_model, batchsize):
 	act_dim = env.action_space.shape[0]
 	policy = FeedForwardNN(obs_dim, act_dim)
 	policy.load_state_dict(torch.load(actor_model))
-	dummy_input = torch.randn(batchsize, obs_dim)
+
+	#dummy_input = torch.randn(batchsize, obs_dim)
+	dummy_input = torch.randn(1, obs_dim)
 	print(dummy_input.size())
-	onnx_filename = 'actor_model_mountaincar.onnx'
-	torch.onnx.export(policy, dummy_input, onnx_filename, verbose=True)
+	onnx_filename = 'actor_model_pendulum.onnx'
+	torch.onnx.export(policy, dummy_input, onnx_filename, verbose=True, opset_version=10)
 
 if __name__ == '__main__':
 	'''
@@ -81,5 +83,5 @@ if __name__ == '__main__':
 
 	actor_model = f"{name}ppo_actor.pth"
 	env = gym.make(name, render_mode="human")
-	test(env=env, actor_model=actor_model)
+	#test(env=env, actor_model=actor_model)
 	export_onnx(env,actor_model=actor_model,batchsize=timesteps_per_batch)
