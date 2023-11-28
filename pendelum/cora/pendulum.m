@@ -1,7 +1,7 @@
 
 % ------------------------------ BEGIN CODE -------------------------------
 disp("Pendulum Environment")
-R0 = interval([-0.51; -0.51; 0], [-0.49; -0.49; 0.1]);
+R0 = interval([-0.51; -0.515; 0], [-0.49; -0.485; 0.1]);
 params.tFinal = 2;
 params.R0 = polyZonotope(R0);
 
@@ -18,9 +18,9 @@ min_torque = -max_torque
 % Reachability Settings ---------------------------------------------------
 options.timeStep = dt_sim;
 options.alg = 'lin';
-options.tensorOrder = 2;
-options.taylorTerms = 4;
-options.zonotopeOrder = 50;
+options.tensorOrder = 2; % Lower values reduce the computational burden
+options.taylorTerms = 4; % Lower values reduce the computational burden
+options.zonotopeOrder = 250; % Lowering the zonotope order reduces the number of cross terms and overall complexity of the zonotopes used in the analysis
 % Parameters for NN evaluation --------------------------------------------
 evParams = struct();
 evParams.poly_method = "singh";
@@ -36,40 +36,42 @@ nn = neuralNetwork.readONNXNetwork('/home/benedikt/PycharmProjects/nn_verificati
 % construct neural network controlled system
 sys = neurNetContrSys(sys, nn, dt_sim);
 % Specification -----------------------------------------------------------
-theta_max = 0.2
-theta_min = -theta_max
-x_safe_min = cos(theta_min)
-x_safe_max = cos(0)
-y_safe_min = sin(theta_min)
-y_safe_max = sin(theta_max)
-
-safeSet = interval([x_safe_min; y_safe_min;-8.0], [x_safe_max;y_safe_max;8.0]); % we want the angle to be in the upright position and don't care about velocity
-spec = specification(safeSet, 'safeSet', interval(0, 2));
+safeSet = interval([-1; -0.2;-8.0], [1;0.2;8.0]); % we want the angle to be in the upright position and don't care about velocity
+spec = specification(safeSet, 'safeSet', interval(1, 2));
 R = reach(sys, params, options, evParams);
-% Verification ------------------------------------------------------------
-%t = tic;
+params.x0 = [-0.5; -0.5;0]; % needed for simulation
+params.tStart = 0;% needed for simulation
 
-%[res, R, simRes] = verify(sys, spec, params, options, evParams, true);
-%tTotal = toc(t);
-%disp(['Result: ' res])
+[t, x] = simulate(sys, params);
+res = verify(sys, spec, params, options, evParams)
+% Check the result
+if res == 'VERIFIED'
+    disp('Verification successful: The pendulum stays within the safe set in the specified interval.');
+else
+    disp('Verification failed: The pendulum does not stay within the safe set in the specified interval.');
+end
 
-% Visualization -----------------------------------------------------------
-disp("Plotting..")
-figure; hold on; box on;
+
+
+% Plotting
+figure;
+hold on;
 dim = 2
-% plot specifications
- plotOverTime(spec, dim, 'DisplayName', 'Safe set');
-
-% plot reachable set
-%useCORAcolors("CORA:contDynamics")
+% Plot Simulation Results
+% plot(t, x(:, 2), 'b', 'DisplayName', 'Simulation');
 plotOverTime(R, dim, 'DisplayName', 'Reachable set');
-%updateColorIndex(); % don't plot initial set
-%plotOverTime(R(1).R0, 1, 'DisplayName', 'Initial set');
-%display(R)
-% plot simulations
-%plotOverTime(simRes, dim, 'DisplayName', 'Simulations');
 
-% labels and legend
-xlabel('time');
-ylabel('y-value');
-legend()
+plot(t, x(:, 2), 'b', 'DisplayName', 'Simulation');
+
+% Plot Safe Set
+yline(0.2, '--g', 'DisplayName', 'Safe Set Upper Bound');
+yline(-0.2, '--g', 'DisplayName', 'Safe Set Lower Bound');
+
+% Labels and Legend
+xlabel('Time');
+ylabel('Second Dimension of Observation');
+title('System Simulation and Reachability Analysis');
+legend('show');
+axis([0, params.tFinal, -1, 1]); % Adjust the axis limits as needed
+
+hold off;

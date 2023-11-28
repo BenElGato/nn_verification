@@ -75,13 +75,13 @@ if __name__ == '__main__':
 	actor_model = ""
 	critic_model = ""
 
-	'''
+
 	train(env=env, timesteps_per_batch=timesteps_per_batch, max_timesteps_per_episode=max_timesteps_per_episode,
 			gamma=gamma,n_updates_per_iteration=n_updates_per_iteration,lr=lr,clip=clip,
-		  	actor_model=actor_model, critic_model=critic_model, timesteps=10_000_000, name=name)
-	'''
+		  	actor_model=actor_model, critic_model=critic_model, timesteps=100_000_000, name=name)
+
 
 	actor_model = f"{name}ppo_actor.pth"
 	env = gym.make(name, render_mode="human")
-	test(env=env, actor_model=actor_model)
-	#export_onnx(env,actor_model=actor_model,batchsize=timesteps_per_batch, path="/home/benedikt/PycharmProjects/nn_verification/pendelum/cora")
+	#test(env=env, actor_model=actor_model)
+	export_onnx(env,actor_model=actor_model,batchsize=timesteps_per_batch, path="/home/benedikt/PycharmProjects/nn_verification/pendelum/cora")

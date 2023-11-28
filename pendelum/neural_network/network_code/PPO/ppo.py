@@ -26,7 +26,6 @@ class PPO:
 		self.clip = clip  # Recommended 0.2, helps define the threshold to clip the ratio during SGA
 		self.name = name
 
-		sin(atan2(x(1), x(2)) + clip(x(3) + (3 * g / (2 * l) * sin(atan2(x(1), x(2)) + 3.0 / (m * l ^ 2) * clip(u(1), min_speed, max_speed)) * dt), min_speed, max_speed)) - x(2);
 
 		self.save_freq = 10  # How often we save in number of iterations
 		self.seed = 50  # Sets the seed of our program, used for reproducibility of results
