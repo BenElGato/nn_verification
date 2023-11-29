@@ -20,15 +20,15 @@ class CustomMountainCarRewardWrapper(gym.Wrapper):
         reward = 100 * ((math.sin(3 * pos_x) * 0.0025 + 0.5 * speed * speed) - (
                     math.sin(3 * self.last_x) * 0.0025 + 0.5 * self.last_speed * self.last_speed))
         if pos_x >= -0.2:
-            reward += 0.1
+            reward += 0.001
         elif pos_x >= 0.0:
-            reward += 1
+            reward += 0.01
         elif pos_x >= 0.15:
-            reward += 5
+            reward += 0.1
         elif pos_x >= 0.35:
-            reward += 10
+            reward += 1
         elif pos_x >= 0.45:
-            reward += 100000
+            reward += 100
         self.last_speed = speed
         self.last_x = pos_x
         return reward

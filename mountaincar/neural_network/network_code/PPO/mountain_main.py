@@ -1,7 +1,3 @@
-"""
-	This file is the executable for running PPO. It is based on this medium article:
-	https://medium.com/@eyyu/coding-ppo-from-scratch-with-pytorch-part-1-4-613dfc1b14c8
-"""
 
 import gymnasium as gym
 import sys
@@ -63,7 +59,7 @@ def export_onnx(env, actor_model, batchsize, path):
 	#dummy_input = torch.randn(batchsize, obs_dim)
 	dummy_input = torch.randn(1, obs_dim)
 	print(dummy_input.size())
-	onnx_filename = f'{path}/actor_model_pendulum.onnx'
+	onnx_filename = f'{path}/actor_model_mountainCar.onnx'
 	torch.onnx.export(policy, dummy_input, onnx_filename, verbose=True, opset_version=10)
 
 if __name__ == '__main__':
@@ -79,18 +75,20 @@ if __name__ == '__main__':
 	'''
 	####################################
 	'''
-	name = 'Pendulum-v1'
+	name = 'MountainCarContinuous-v0'
 	env = gym.make(name)
+	env = wrapper.CustomMountainCarRewardWrapper(env)
 	actor_model = ""
 	critic_model = ""
 
 
-	train(env=env, timesteps_per_batch=timesteps_per_batch, max_timesteps_per_episode=max_timesteps_per_episode,
-			gamma=gamma,n_updates_per_iteration=n_updates_per_iteration,lr=lr,clip=clip,
-		  	actor_model=actor_model, critic_model=critic_model, timesteps=1_000_000, name=name, entropy_coef=0.001)
+	#train(env=env, timesteps_per_batch=timesteps_per_batch, max_timesteps_per_episode=max_timesteps_per_episode,
+	#		gamma=gamma,n_updates_per_iteration=n_updates_per_iteration,lr=lr,clip=clip,
+	#	  	actor_model=actor_model, critic_model=critic_model, timesteps=1_000_000, name=name, entropy_coef=0.001)
 
 
 	actor_model = f"{name}ppo_actor.pth"
 	env = gym.make(name, render_mode="human")
+	env = wrapper.CustomMountainCarRewardWrapper(env)
 	test(env=env, actor_model=actor_model)
-	#export_onnx(env,actor_model=actor_model,batchsize=timesteps_per_batch, path="/home/benedikt/PycharmProjects/nn_verification/pendelum/cora")
+	#export_onnx(env,actor_model=actor_model,batchsize=timesteps_per_batch, path="/home/benedikt/PycharmProjects/nn_verification/mountaincar/cora")
