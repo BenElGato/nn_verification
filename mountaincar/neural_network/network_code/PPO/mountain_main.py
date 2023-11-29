@@ -91,4 +91,4 @@ if __name__ == '__main__':
 	env = gym.make(name, render_mode="human")
 	env = wrapper.CustomMountainCarRewardWrapper(env)
 	test(env=env, actor_model=actor_model)
-	#export_onnx(env,actor_model=actor_model,batchsize=timesteps_per_batch, path="/home/benedikt/PycharmProjects/nn_verification/mountaincar/cora")
+	export_onnx(env,actor_model=actor_model,batchsize=timesteps_per_batch, path="/home/benedikt/PycharmProjects/nn_verification/mountaincar/cora")

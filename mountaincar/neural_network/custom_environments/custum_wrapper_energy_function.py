@@ -29,6 +29,10 @@ class CustomMountainCarRewardWrapper(gym.Wrapper):
             reward += 1
         elif pos_x >= 0.45:
             reward += 100
+        #elif pos_x == -1.6:
+          #  reward -= 1
+
+
         self.last_speed = speed
         self.last_x = pos_x
         return reward
