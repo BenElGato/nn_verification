@@ -91,12 +91,13 @@ class PPO:
 				# Calculate gradients and perform backward propagation for actor network
 				self.actor_optim.zero_grad()
 				actor_loss.backward(retain_graph=True)
-				nn.utils.clip_grad_norm_(self.actor.parameters(), self.max_grad_norm)
+				#nn.utils.clip_grad_norm_(self.actor.parameters(), self.max_grad_norm)
 				self.actor_optim.step()
 
 				# Calculate gradients and perform backward propagation for critic network
 				self.critic_optim.zero_grad()
 				critic_loss.backward()
+				#nn.utils.clip_grad_norm_(self.critic.parameters(), self.max_grad_norm)
 				self.critic_optim.step()
 
 				# Log actor loss
@@ -104,9 +105,8 @@ class PPO:
 
 			# Print a summary of our training so far
 			self._log_summary()
-
-		torch.save(self.actor.state_dict(), f'./{self.name}ppo_actor.pth')
-		torch.save(self.critic.state_dict(), f'./{self.name}ppo_critic.pth')
+			torch.save(self.actor.state_dict(), f'./{self.name}ppo_actor.pth')
+			torch.save(self.critic.state_dict(), f'./{self.name}ppo_critic.pth')
 		return self.avg_ep_rews_history
 
 	def collectData(self):
@@ -212,4 +212,5 @@ class PPO:
 		Stabilizes the search for better convergence --> The learning rates decrease with time
 		:return:
 		'''
-		return max(self.lr * (1.0 - (self.t_so_far - 1.0)/self.total_timesteps), 0.0)
+		return self.lr
+		#return max(self.lr * (1.0 - (self.t_so_far - 1.0)/self.total_timesteps), 0.0)
