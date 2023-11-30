@@ -20,7 +20,7 @@ options.timeStep = dt_sim;
 options.alg = 'lin';
 options.tensorOrder = 2; % Lower values reduce the computational burden
 options.taylorTerms = 4; % Lower values reduce the computational burden
-options.zonotopeOrder = 250; % Lowering the zonotope order reduces the number of cross terms and overall complexity of the zonotopes used in the analysis
+options.zonotopeOrder = 500; % Lowering the zonotope order reduces the number of cross terms and overall complexity of the zonotopes used in the analysis
 % Parameters for NN evaluation --------------------------------------------
 evParams = struct();
 evParams.poly_method = "singh";
@@ -32,7 +32,7 @@ f = @(x, u) [
     ];
 sys = nonlinearSys(f);
 % load neural network controller
-nn = neuralNetwork.readONNXNetwork('/home/benedikt/PycharmProjects/nn_verification/pendelum/cora/actor_model_mountaincar.onnx');
+nn = neuralNetwork.readONNXNetwork('/home/benedikt/PycharmProjects/nn_verification/pendelum/cora/actor_model_pendulum.onnx');
 % construct neural network controlled system
 sys = neurNetContrSys(sys, nn, dt_sim);
 % Specification -----------------------------------------------------------

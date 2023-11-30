@@ -38,6 +38,7 @@ class PPO:
 		self.actor = policy_class(self.obs_dim, self.act_dim)                                                   # ALG STEP 1
 		self.critic = policy_class(self.obs_dim, 1)
 
+
 		# Initialize optimizers for actor and critic
 		self.actor_optim = Adam(self.actor.parameters(), lr=self.lr)
 		self.critic_optim = Adam(self.critic.parameters(), lr=self.lr)

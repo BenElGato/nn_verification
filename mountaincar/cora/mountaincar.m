@@ -50,7 +50,7 @@ end
 % Plotting
 figure;
 hold on;
-dim = 1
+dim = 0
 % Plot Simulation Results
 % plot(t, x(:, 2), 'b', 'DisplayName', 'Simulation');
 plotOverTime(R, dim, 'DisplayName', 'Reachable set');
