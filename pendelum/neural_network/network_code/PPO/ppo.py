@@ -12,21 +12,21 @@ import matplotlib.pyplot as plt
 
 
 class PPO:
-	def __init__(self, policy_class, env, timesteps_per_batch, max_timesteps_per_episode, gamma,n_updates_per_iteration, lr, clip, name, total_timesteps, entropy_coef):
+	def __init__(self, policy_class, env, name, params):
 		'''Hyperparameters ###############################'''
-		self.timesteps_per_batch = timesteps_per_batch  # Number of timesteps to run per batch
-		self.max_timesteps_per_episode = max_timesteps_per_episode  # Max number of timesteps per episode
-		self.n_updates_per_iteration = n_updates_per_iteration  # Number of times to update actor/critic per iteration
-		self.lr = lr  # Learning rate of actor optimizer
-		self.gamma = gamma  # Discount factor to be applied when calculating Rewards-To-Go
-		self.clip = clip  # Recommended 0.2, helps define the threshold to clip the ratio during SGA
+		self.timesteps_per_batch = params["timesteps_per_batch"]  # Number of timesteps to run per batch
+		self.max_timesteps_per_episode = params["max_timesteps_per_episode"]  # Max number of timesteps per episode
+		self.n_updates_per_iteration = params["n_updates_per_iteration"]  # Number of times to update actor/critic per iteration
+		self.lr = params["lr"]  # Learning rate of actor optimizer
+		self.gamma = params["gamma"]  # Discount factor to be applied when calculating Rewards-To-Go
+		self.clip = params["clip"]  # Recommended 0.2, helps define the threshold to clip the ratio during SGA
 		self.name = name
-		self.total_timesteps = total_timesteps
-		self.entropy_coef = entropy_coef
-		self.max_grad_norm = 0.5
+		self.total_timesteps = params["total_timesteps"]
+		self.entropy_coef = params["entropy_coef"]
+		self.max_grad_norm = params["max_grad_norm"]
+		self.dynamic_lr = params["dynamic_lr"]
+		self.gradient_clipping = params["gradient_clipping"]
 
-
-		self.save_freq = 10  # How often we save in number of iterations
 		self.seed = 50  # Sets the seed of our program, used for reproducibility of results
 		'''##########################################################################'''
 		# Extract environment information
@@ -35,8 +35,8 @@ class PPO:
 		self.act_dim = env.action_space.shape[0]
 
 		 # Initialize actor and critic networks
-		self.actor = policy_class(self.obs_dim, self.act_dim)                                                   # ALG STEP 1
-		self.critic = policy_class(self.obs_dim, 1)
+		self.actor = policy_class(self.obs_dim, self.act_dim, params["neurons"])                                                   # ALG STEP 1
+		self.critic = policy_class(self.obs_dim, 1, params["neurons"])
 
 
 		# Initialize optimizers for actor and critic
@@ -91,13 +91,15 @@ class PPO:
 				# Calculate gradients and perform backward propagation for actor network
 				self.actor_optim.zero_grad()
 				actor_loss.backward(retain_graph=True)
-				#nn.utils.clip_grad_norm_(self.actor.parameters(), self.max_grad_norm)
+				if self.gradient_clipping:
+					nn.utils.clip_grad_norm_(self.actor.parameters(), self.max_grad_norm)
 				self.actor_optim.step()
 
 				# Calculate gradients and perform backward propagation for critic network
 				self.critic_optim.zero_grad()
 				critic_loss.backward()
-				#nn.utils.clip_grad_norm_(self.critic.parameters(), self.max_grad_norm)
+				if self.gradient_clipping:
+					nn.utils.clip_grad_norm_(self.critic.parameters(), self.max_grad_norm)
 				self.critic_optim.step()
 
 				# Log actor loss
@@ -212,5 +214,7 @@ class PPO:
 		Stabilizes the search for better convergence --> The learning rates decrease with time
 		:return:
 		'''
-		return self.lr
-		#return max(self.lr * (1.0 - (self.t_so_far - 1.0)/self.total_timesteps), 0.0)
+		if self.dynamic_lr:
+			return max(self.lr * (1.0 - (self.t_so_far - 1.0) / self.total_timesteps), 0.0)
+		else:
+			return self.lr
