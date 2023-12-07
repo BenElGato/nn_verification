@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 
 
 class PPO:
-	def __init__(self, policy_class, env, name, params):
+	def __init__(self, policy_class, env, name, params, path, counter):
 		'''Hyperparameters ###############################'''
 		self.timesteps_per_batch = params["timesteps_per_batch"]  # Number of timesteps to run per batch
 		self.max_timesteps_per_episode = params["max_timesteps_per_episode"]  # Max number of timesteps per episode
@@ -33,11 +33,12 @@ class PPO:
 		self.env = env
 		self.obs_dim = env.observation_space.shape[0]
 		self.act_dim = env.action_space.shape[0]
+		self.path = path
+		self.counter = counter
 
 		 # Initialize actor and critic networks
 		self.actor = policy_class(self.obs_dim, self.act_dim, params["neurons"])                                                   # ALG STEP 1
 		self.critic = policy_class(self.obs_dim, 1, params["neurons"])
-
 
 		# Initialize optimizers for actor and critic
 		self.actor_optim = Adam(self.actor.parameters(), lr=self.lr)
@@ -85,7 +86,6 @@ class PPO:
 
 				actor_loss = (-torch.min(surr1, surr2)).mean()
 				actor_loss = actor_loss - self.entropy_coef * entropy.mean()
-				# actor_loss = (-torch.min(surr1, surr2)).mean() - self.entropy_coef * entropy.mean()
 				critic_loss = nn.MSELoss()(V, batch_rtgs)
 
 				# Calculate gradients and perform backward propagation for actor network
@@ -105,10 +105,10 @@ class PPO:
 				# Log actor loss
 				self.actor_losses.append(actor_loss.detach())
 
-			# Print a summary of our training so far
+
 			self._log_summary()
-			torch.save(self.actor.state_dict(), f'./{self.name}ppo_actor.pth')
-			torch.save(self.critic.state_dict(), f'./{self.name}ppo_critic.pth')
+			torch.save(self.actor.state_dict(), f'{self.path}/ppo_actor{self.counter}.pth')
+			torch.save(self.critic.state_dict(), f'{self.path}/ppo_critic{self.counter}.pth')
 		return self.avg_ep_rews_history
 
 	def collectData(self):

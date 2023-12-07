@@ -1,12 +1,13 @@
 
 % ------------------------------ BEGIN CODE -------------------------------
 disp("Pendulum Environment")
-R0 = interval([-0.51; -0.515; 0], [-0.49; -0.485; 0.1]);
-params.tFinal = 2;
+R0 = interval([-0.52; -0.52; 0.0], [-0.48; -0.48; 0.2]);
+params.tFinal =2;
 params.R0 = polyZonotope(R0);
 
 % Parameters --------------------------------------------------------------
 dt_sim = 0.001;
+sampling_time = 0.01
 hmax = 5;
 g = 10.0 % gravity of the system
 m = 1.0 % mass of the pendulum
@@ -32,9 +33,20 @@ f = @(x, u) [
     ];
 sys = nonlinearSys(f);
 % load neural network controller
-nn = neuralNetwork.readONNXNetwork('/home/benedikt/PycharmProjects/nn_verification/pendelum/cora/actor_model_pendulum.onnx');
+nn = neuralNetwork.readONNXNetwork('/home/benedikt/PycharmProjects/nn_verification/pendelum/cora/network.onnx');
+ob = nn.evaluate(params.R0, evParams);
+nn.refine(2, "layer", "both", params.R0.c, true);
+xs = ob.randPoint(500);
+figure;
+hold on;
+plot(ob,[1], "DisplayName", "Input Set");
+scatter(xs, 1, 'k', "Marker", '.', "DisplayName", "Samples")
+%plot(ob, [1 2])
+hold off;
+
+
 % construct neural network controlled system
-sys = neurNetContrSys(sys, nn, dt_sim);
+sys = neurNetContrSys(sys, nn, sampling_time);
 % Specification -----------------------------------------------------------
 safeSet = interval([-1; -0.2;-8.0], [1;0.2;8.0]); % we want the angle to be in the upright position and don't care about velocity
 spec = specification(safeSet, 'safeSet', interval(1, 2));
