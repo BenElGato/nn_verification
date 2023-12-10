@@ -63,3 +63,8 @@
 
 {'neurons': 9, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 200, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 500000, 'nn': <class 'network.SimpleSigmoidNN'>}
 
+## Results for Setting 9
+![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/pendelum/neural_network/network_code/PPO/training_docs/networks/graph9.png)
+
+{'neurons': 9, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 200, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 2000000, 'nn': <class 'network.tanhNN'>}
+

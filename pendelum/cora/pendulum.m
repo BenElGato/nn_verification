@@ -1,14 +1,25 @@
 
 % ------------------------------ BEGIN CODE -------------------------------
 disp("Pendulum Environment")
-R0 = interval([-0.52; -0.52; 0.0], [-0.48; -0.48; 0.2]);
-params.tFinal =2;
+% ----------------Starting state definition----------
+starting_angle = pi;
+pos_x = cos(starting_angle);
+pos_y = sin(starting_angle);
+thetadot = 0;
+%--------------------------------------------------------------
+
+%--------------------------uncertainties definition----------------------
+uncertainty_pos = 0.01
+pos_x
+uncertainty_speed = 0.01
+%------------------------------------------------------------------------
+R0 = interval([pos_x; pos_y; thetadot], [pos_x; pos_y; thetadot]);
+params.tFinal = 2;
 params.R0 = polyZonotope(R0);
 
 % Parameters --------------------------------------------------------------
-dt_sim = 0.001;
-sampling_time = 0.01
-hmax = 5;
+
+sampling_time = 0.1
 g = 10.0 % gravity of the system
 m = 1.0 % mass of the pendulum
 l = 1.0 % lenght of the pendulum
@@ -17,14 +28,22 @@ min_speed = -max_speed
 max_torque = 2.0
 min_torque = -max_torque
 % Reachability Settings ---------------------------------------------------
-options.timeStep = dt_sim;
+options.timeStep = 0.01;
 options.alg = 'lin';
 options.tensorOrder = 2; % Lower values reduce the computational burden
-options.taylorTerms = 4; % Lower values reduce the computational burden
-options.zonotopeOrder = 500; % Lowering the zonotope order reduces the number of cross terms and overall complexity of the zonotopes used in the analysis
+options.taylorTerms = 1; % Lower values reduce the computational burden
+options.zonotopeOrder = 80; % Lowering the zonotope order reduces the number of cross terms and overall complexity of the zonotopes used in the analysis
+
+%options.maxError = 3;
 % Parameters for NN evaluation --------------------------------------------
-evParams = struct();
-evParams.poly_method = "singh";
+%evParams = struct();
+%evParams.poly_method = "singh";
+% TODO Splitting
+evParams = struct;
+evParams.poly_method = 'regression';
+evParams.bound_approx = true;
+evParams.reuse_bounds = false;
+evParams.num_generators = 100000
 % System Dynamics ---------------------------------------------------------
 f = @(x, u) [
      -x(2)*x(3); % change in x
@@ -33,16 +52,10 @@ f = @(x, u) [
     ];
 sys = nonlinearSys(f);
 % load neural network controller
-nn = neuralNetwork.readONNXNetwork('/home/benedikt/PycharmProjects/nn_verification/pendelum/cora/network.onnx');
-ob = nn.evaluate(params.R0, evParams);
+nn = neuralNetwork.readONNXNetwork('/home/benedikt/PycharmProjects/nn_verification/pendelum/cora/actor_model_workingNN.onnx');
+nn.evaluate(params.R0, evParams);
+
 nn.refine(2, "layer", "both", params.R0.c, true);
-xs = ob.randPoint(500);
-figure;
-hold on;
-plot(ob,[1], "DisplayName", "Input Set");
-scatter(xs, 1, 'k', "Marker", '.', "DisplayName", "Samples")
-%plot(ob, [1 2])
-hold off;
 
 
 % construct neural network controlled system
@@ -71,7 +84,7 @@ hold on;
 dim = 2
 % Plot Simulation Results
 % plot(t, x(:, 2), 'b', 'DisplayName', 'Simulation');
-plotOverTime(R, dim, 'DisplayName', 'Reachable set');
+plotOverTime(R, dim, 'DisplayName', 'Reachable set', 'Unify', true);
 
 plot(t, x(:, 2), 'b', 'DisplayName', 'Simulation');
 

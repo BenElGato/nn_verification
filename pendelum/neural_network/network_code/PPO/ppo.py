@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 
 
 class PPO:
-	def __init__(self, policy_class, env, name, params, path, counter):
+	def __init__(self, policy_class, env, name, params, path, counter, obs_dim, act_dim):
 		'''Hyperparameters ###############################'''
 		self.timesteps_per_batch = params["timesteps_per_batch"]  # Number of timesteps to run per batch
 		self.max_timesteps_per_episode = params["max_timesteps_per_episode"]  # Max number of timesteps per episode
@@ -31,8 +31,10 @@ class PPO:
 		'''##########################################################################'''
 		# Extract environment information
 		self.env = env
-		self.obs_dim = env.observation_space.shape[0]
-		self.act_dim = env.action_space.shape[0]
+
+
+		self.obs_dim = obs_dim
+		self.act_dim = act_dim
 		self.path = path
 		self.counter = counter
 

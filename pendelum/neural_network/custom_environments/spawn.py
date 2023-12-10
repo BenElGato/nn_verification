@@ -7,12 +7,13 @@ import numpy as np
 class PendulumEnvWrapper(gym.Wrapper):
     def __init__(self, env):
         super().__init__(env)
-        self.starting_states = starting_states = {
-		"x_init": -0.5,
-		"y_init": -0.5
-	}
+    def step(self, action):
+        observation, reward, terminated, truncated, info = self.env.step(action)
+        done = terminated or truncated
+        custom_reward = self.custom_reward_function(observation, reward, done)
 
-    def reset(self, *, seed: Optional[int] = None, options: Optional[dict] = None):
-        normal_reset, info = self.env.reset()
-        return np.array([-0.5, -0.5, 0.0]), info
+        return observation, custom_reward, terminated, truncated, info
 
+    def custom_reward_function(self, state, original_reward, done):
+
+        return original_reward
