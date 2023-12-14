@@ -66,8 +66,8 @@ class FeedForwardInitialisationTanhNN(nn.Module):
 		}
 		'''
 
-		#nn.init.normal_(self.layer1.weight, mean=0.0, std=np.sqrt(2. / in_dim))
-		#nn.init.constant_(self.layer1.bias, 0)
+		#neural_network.init.normal_(self.layer1.weight, mean=0.0, std=np.sqrt(2. / in_dim))
+		#neural_network.init.constant_(self.layer1.bias, 0)
 
 		'''
 		Use Glorot initialization for tanh layer
@@ -81,8 +81,8 @@ class FeedForwardInitialisationTanhNN(nn.Module):
 		}
 
 		'''
-		#nn.init.normal_(self.layer2.weight, mean=0.0, std=np.sqrt(2. / in_dim))
-		#nn.init.constant_(self.layer2.bias, 0)
+		#neural_network.init.normal_(self.layer2.weight, mean=0.0, std=np.sqrt(2. / in_dim))
+		#neural_network.init.constant_(self.layer2.bias, 0)
 		# ----------------------------------------------------------------------------------------------------------
 
 	def forward(self, obs):
