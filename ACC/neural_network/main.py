@@ -74,7 +74,7 @@ max_grad_norm = 0.9
 '''
 
 # TODO adjust reset function so that it always starts between y=-0.48 and y=0.48
-params = {'neurons': 30, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 200, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': tanhNN}
+params = {'neurons': 30, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 500, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 100000, 'neural_network': tanhNN}
 
 
 env = gym.make("CustomEnv")

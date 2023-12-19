@@ -160,7 +160,7 @@ class tanhNN(nn.Module):
 
 		activation1 = F.tanh(self.layer1(obs))
 		activation2 = F.tanh(self.layer2(activation1))
-		output = 2.0 * F.tanh(self.layer3(activation2))
+		output = 3.0 * F.tanh(self.layer3(activation2))
 
 		return output
 class sigmoidNN(nn.Module):

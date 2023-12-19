@@ -1,13 +1,14 @@
 import random
 
 import gymnasium as gym
+import matplotlib.pyplot
 import numpy as np
 from gymnasium.vector.utils import spaces
 
 
 class CustomEnv(gym.Env):
     '''
-    Observation space: [x_lead, v_lead, a_lead, x_ego, v_ego, a_ego]
+    Observation space: [v_ego, T_gap, D_rel, D_safe]
     '''
     def __init__(self):
         '''
@@ -26,7 +27,7 @@ class CustomEnv(gym.Env):
         '''
         self.a_c_lead = -2.0
         self.dt = 0.01
-
+        self.t= 0
 
         '''
         Parameters for calulating the rewards/costs
@@ -38,8 +39,8 @@ class CustomEnv(gym.Env):
         '''
         Definition of action and observation space
         '''
-        high = np.array([np.inf, np.inf, np.inf, np.inf, np.inf, np.inf], dtype=np.float32)
-        low = np.array([-np.inf, -np.inf, - np.inf, -np.inf, -np.inf, - np.inf], dtype=np.float32)
+        high = np.array([np.inf, np.inf, np.inf, np.inf], dtype=np.float32)
+        low = np.array([-np.inf, -np.inf, - np.inf, -np.inf], dtype=np.float32)
 
 
         self.action_space = spaces.Box(
@@ -48,6 +49,8 @@ class CustomEnv(gym.Env):
         self.observation_space = spaces.Box(low=low, high=high, dtype=np.float32)
 
     def step(self, action):
+        self.t += self.dt
+
         self.x_lead += (self.v_lead)*self.dt
         self.x_ego += (self.x_ego)*self.dt
 
@@ -60,10 +63,18 @@ class CustomEnv(gym.Env):
         self.D_rel = self.x_lead - self.x_ego
         self.D_safe = self.D_Default + self.T_Gap * self.v_ego
 
-        reward = (self.D_rel - self.D_safe)
-        return np.array([self.x_lead, self.v_lead, self.a_lead, self.x_ego, self.v_ego, self.a_ego], dtype=np.float32), reward, False, False, {}
+        reward = -1/(np.exp(self.D_rel - self.D_safe))
+
+        terminated = bool(
+            self.x_ego >= self.x_lead
+        )
+        if terminated:
+            reward -= 100
+            #print(self.a_ego)
+        return np.array([self.v_ego, self.T_Gap, self.D_rel, self.D_safe], dtype=np.float32), reward, terminated, False, {}
     def reset(self):
         super().reset()
+        print(self.t, "|", (self.D_rel- self.D_safe), "|", self.v_ego, "|", self.v_lead)
         self.x_lead = random.uniform(90, 110)
         self.v_lead = random.uniform(32, 32.2)
         self.a_lead = 0.0
@@ -73,13 +84,14 @@ class CustomEnv(gym.Env):
         self.a_ego = 0.0
 
         self.a_c_lead = -2.0
+        self.t = 0
 
         self.D_Default = 10.0
         self.T_Gap = 1.4
         self.D_rel = self.x_lead - self.x_ego
         self.D_safe = self.D_Default + self.T_Gap * self.v_ego
 
-        return np.array([self.x_lead, self.v_lead, self.a_lead, self.x_ego, self.v_ego, self.a_ego], dtype=np.float32), {}
+        return np.array([self.v_ego, self.T_Gap, self.D_rel, self.D_safe], dtype=np.float32), {}
 
     def render(self, mode='human'):
         pass
