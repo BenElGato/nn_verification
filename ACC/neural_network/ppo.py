@@ -7,7 +7,6 @@ import torch
 import torch.nn as nn
 from torch.optim import Adam
 from torch.distributions import MultivariateNormal
-from network import FeedForwardNN
 import matplotlib.pyplot as plt
 
 
@@ -41,6 +40,8 @@ class PPO:
 		 # Initialize actor and critic networks
 		self.actor = policy_class(self.obs_dim, self.act_dim, params["neurons"])                                                   # ALG STEP 1
 		self.critic = policy_class(self.obs_dim, 1, params["neurons"])
+		#self.actor.load_state_dict(torch.load("/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/ppo_actor2.pth"))
+		#self.critic.load_state_dict(torch.load("/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/ppo_critic2.pth"))
 
 		# Initialize optimizers for actor and critic
 		self.actor_optim = Adam(self.actor.parameters(), lr=self.lr)
@@ -51,7 +52,6 @@ class PPO:
 		self.cov_mat = torch.diag(self.cov_var)
 
 		self.avg_ep_rews_history = []  # List to store average episodic returns per iteration
-
 
 		self.delta_t = time.time_ns()
 		self.t_so_far = 0

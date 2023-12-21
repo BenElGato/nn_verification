@@ -17,17 +17,13 @@ class CustomEnv(gym.Env):
         self.x_lead = random.uniform(90, 110)
         self.v_lead = random.uniform(32, 32.2)
         self.a_lead = 0.0
-
-        self.x_ego = random.uniform(10, 11)
-        self.v_ego = random.uniform(30, 30.2)
+        self.x_ego = random.uniform(28, 38)
+        self.v_ego = random.uniform(25, 35)
         self.a_ego = 0.0
-
-        '''
-        Internal parameters
-        '''
-        self.a_c_lead = -2.0
-        self.dt = 0.01
-        self.t= 0
+        self.v_set = self.v_ego
+        self.a_c_lead = random.uniform(-3.0, -1.0)
+        self.dt = 0.1
+        self.t = 0
 
         '''
         Parameters for calulating the rewards/costs
@@ -39,8 +35,8 @@ class CustomEnv(gym.Env):
         '''
         Definition of action and observation space
         '''
-        high = np.array([np.inf, np.inf, np.inf, np.inf], dtype=np.float32)
-        low = np.array([-np.inf, -np.inf, - np.inf, -np.inf], dtype=np.float32)
+        high = np.array([np.inf, np.inf, np.inf, np.inf,np.inf, np.inf, np.inf, np.inf], dtype=np.float32)
+        low = np.array([-np.inf, -np.inf, - np.inf, -np.inf,-np.inf, -np.inf, - np.inf, -np.inf], dtype=np.float32)
 
 
         self.action_space = spaces.Box(
@@ -52,7 +48,7 @@ class CustomEnv(gym.Env):
         self.t += self.dt
 
         self.x_lead += (self.v_lead)*self.dt
-        self.x_ego += (self.x_ego)*self.dt
+        self.x_ego += (self.v_ego)*self.dt
 
         self.v_lead += (self.a_lead)*self.dt
         self.v_ego += (self.a_ego)*self.dt
@@ -63,35 +59,37 @@ class CustomEnv(gym.Env):
         self.D_rel = self.x_lead - self.x_ego
         self.D_safe = self.D_Default + self.T_Gap * self.v_ego
 
-        reward = -1/(np.exp(self.D_rel - self.D_safe))
+        reward = -(self.D_rel-self.D_safe - 20)**2
 
         terminated = bool(
             self.x_ego >= self.x_lead
         )
         if terminated:
-            reward -= 100
+            reward -= 10000
             #print(self.a_ego)
-        return np.array([self.v_ego, self.T_Gap, self.D_rel, self.D_safe], dtype=np.float32), reward, terminated, False, {}
+        return np.array([self.x_lead, self.x_ego, self.v_lead, self.v_ego, self.a_lead, self.a_ego,self.T_Gap, self.D_Default], dtype=np.float32), reward, terminated, False, {}
     def reset(self):
         super().reset()
-        print(self.t, "|", (self.D_rel- self.D_safe), "|", self.v_ego, "|", self.v_lead)
         self.x_lead = random.uniform(90, 110)
         self.v_lead = random.uniform(32, 32.2)
         self.a_lead = 0.0
-
-        self.x_ego = random.uniform(10, 11)
-        self.v_ego = random.uniform(30, 30.2)
+        self.x_ego = random.uniform(28, 38)
+        self.v_ego = random.uniform(25, 35)
         self.a_ego = 0.0
-
-        self.a_c_lead = -2.0
+        self.v_set = self.v_ego
+        self.a_c_lead = random.uniform(-3.0, -1.0)
+        self.dt = 0.1
         self.t = 0
 
+        '''
+        Parameters for calulating the rewards/costs
+        '''
         self.D_Default = 10.0
         self.T_Gap = 1.4
         self.D_rel = self.x_lead - self.x_ego
         self.D_safe = self.D_Default + self.T_Gap * self.v_ego
 
-        return np.array([self.v_ego, self.T_Gap, self.D_rel, self.D_safe], dtype=np.float32), {}
+        return np.array([self.x_lead, self.x_ego, self.v_lead, self.v_ego, self.a_lead, self.a_ego,self.T_Gap, self.D_Default], dtype=np.float32), {}
 
     def render(self, mode='human'):
         pass
