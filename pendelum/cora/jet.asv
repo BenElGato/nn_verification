@@ -1,0 +1,31 @@
+disp("Jet Environment")
+R0 = interval([0; 0; 0; -50.0; 0; 0], [0; 0.2; 0; 0; 50.0; 0]);
+
+options.timeStep = 0.1;
+options.alg = 'lin';
+options.tensorOrder = 2;
+options.taylorTerms = 4;
+options.zonotopeOrder = 20;
+
+
+evParams = struct;
+evParams.poly_method = 'regression';
+evParams.bound_approx = true;
+evParams.reuse_bounds = false;
+evParams.num_generators = 100000
+
+
+f = @(x, u) [u(0);
+    x(1) + u(0); 
+    cos(x(1) + u(0));
+    sin(x(1) + u(0)); 
+    0; 
+    cos(x(5)); 
+    sin(x(5))
+    ];
+
+sys = nonlinearSys(f);
+nn = neuralNetwork.readONNXNetwork('/home/benedikt/PycharmProjects/nn_verification/jets/cora/network.onnx');
+nn.evaluate(params.R0, evParams);
+nn.refine(2, "layer", "both", params.R0.c, true);
+[t, x] = simulate(sys, params);

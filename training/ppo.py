@@ -21,13 +21,9 @@ class PPO:
 		self.max_grad_norm = params["max_grad_norm"]
 		self.dynamic_lr = params["dynamic_lr"]
 		self.gradient_clipping = params["gradient_clipping"]
-
 		self.seed = 50  # Sets the seed of our program, used for reproducibility of results
 		'''##########################################################################'''
-		# Extract environment information
 		self.env = env
-
-
 		self.obs_dim = obs_dim
 		self.act_dim = act_dim
 		self.path = path

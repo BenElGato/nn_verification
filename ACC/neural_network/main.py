@@ -3,8 +3,8 @@ import sys
 from gymnasium.envs.registration import register
 from matplotlib import pyplot as plt
 
-from ACC.neural_network.network import tanhNN, RELU_NN
-from ACC.neural_network.ppo import PPO
+from ACC.neural_network.network import tanhNN, RELU_NN, HeavyBrakes_RELU_NN
+#from ACC.neural_network.ppo import PPO
 from ACC_environment import CustomEnv
 import torch
 import torch.nn as nn
@@ -37,7 +37,7 @@ def export_onnx(env, actor_model, path, neurons, name, nn, obs_dim, act_dim):
 	onnx_filename = f'{path}/{name}.onnx'
 	torch.onnx.export(policy, dummy_input, onnx_filename, verbose=True, opset_version=10)
 def compare_settings(env, name, settings, path, obs_dim, act_dim):
-	counter = 2
+	counter = 100
 	for i in settings:
 		model = PPO(policy_class=i["neural_network"], env=env, name=name, params=i, path=path, counter=counter, obs_dim=obs_dim, act_dim=act_dim)
 		average_rewards = model.learn()
@@ -77,8 +77,8 @@ max_grad_norm = 0.9
 ####################################
 '''
 
-# TODO adjust reset function so that it always starts between y=-0.48 and y=0.48
-params = {'neurons': 30, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 3_000_000, 'neural_network': RELU_NN}
+# TODO make episode lenght longer
+params = {'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 7_000_000, 'neural_network': tanhNN}
 
 
 env = gym.make("CustomEnv")
@@ -89,12 +89,13 @@ act_dim = env.action_space.shape[0]
 
 settings = [params]
 name = "CustomEnv"
+
 compare_settings(env,name, settings,"/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network", obs_dim=obs_dim,act_dim=act_dim)
 
-actor_model = f"/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/ppo_actor1.pth"
+actor_model = f"/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/ppo_actor11.pth"
 
 #test(env=env, actor_model=actor_model, neurons=params["neurons"], neural_network=params["neural_network"], obs_dim=obs_dim, act_dim=act_dim)
-#export_onnx(env,actor_model=actor_model, path="/home/benedikt/PycharmProjects/nn_verification/ACC/cora", neurons=params["neurons"], name="network3", nn=params["neural_network"], obs_dim=obs_dim,act_dim=act_dim)
+#export_onnx(env,actor_model=actor_model, path="/home/benedikt/PycharmProjects/nn_verification/ACC/cora", neurons=params["neurons"], name="network11", nn=params["neural_network"], obs_dim=obs_dim,act_dim=act_dim)
 
 
 

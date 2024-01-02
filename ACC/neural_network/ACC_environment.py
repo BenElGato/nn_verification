@@ -15,13 +15,13 @@ class CustomEnv(gym.Env):
         Observation space initialization
         '''
         self.x_lead = random.uniform(90, 110)
-        self.v_lead = random.uniform(32, 32.2)
+        self.v_lead = random.uniform(0, 32.2) # TODO: v lead variable machen
         self.a_lead = 0.0
-        self.x_ego = random.uniform(28, 38)
-        self.v_ego = random.uniform(25, 35)
+        self.x_ego = random.uniform(0, 58)
+        self.v_ego = random.uniform(self.v_lead - 5, self.v_lead + 5)
         self.a_ego = 0.0
         self.v_set = self.v_ego
-        self.a_c_lead = random.uniform(-3.0, -1.0)
+        self.a_c_lead = -2.0
         self.dt = 0.1
         self.t = 0
 
@@ -29,7 +29,7 @@ class CustomEnv(gym.Env):
         Parameters for calulating the rewards/costs
         '''
         self.D_Default = 10.0
-        self.T_Gap = 1.4
+        self.T_Gap = random.uniform(0.0, 3.0)
         self.D_rel = self.x_lead - self.x_ego
         self.D_safe = self.D_Default + self.T_Gap * self.v_ego
         '''
@@ -57,27 +57,58 @@ class CustomEnv(gym.Env):
         self.a_ego += (-2*self.a_ego + 2*action[0] - 0.0001*(self.v_ego)**2)*self.dt
 
         self.D_rel = self.x_lead - self.x_ego
-        self.D_safe = self.D_Default + self.T_Gap * self.v_ego
+        self.D_safe = self.D_Default +  (self.T_Gap) * self.v_ego
 
-        reward = -(self.D_rel-self.D_safe - 20)**2
 
+        r_a = -(self.a_ego)**2
+        w_1 = 0.01
+        '''
+        Vehicle is in dangerous zone
+        '''
+        if self.D_rel <  1.25 * self.D_safe:
+            w_2 = 2
+        elif self.D_rel < 1.5 * self.D_safe:
+            # TODO: here a linear function
+            '''
+            Desired distance
+            '''
+            w_2 = 0.5
+        else:
+            '''
+            Pursuit
+            '''
+            w_2 = 2
+        r_d = -w_2 * abs((self.D_rel / (1.375 * self.D_safe)) - 1)
+
+        reward = w_1 * r_a + w_2 * r_d
+
+        '''
+        if self.D_rel < self.D_safe:
+            reward -= self.x_lead - self.x_ego
+        else:
+            reward += 1
+        '''
         terminated = bool(
             self.x_ego >= self.x_lead
         )
+
         if terminated:
             reward -= 10000
             #print(self.a_ego)
         return np.array([self.x_lead, self.x_ego, self.v_lead, self.v_ego, self.a_lead, self.a_ego,self.T_Gap, self.D_Default], dtype=np.float32), reward, terminated, False, {}
     def reset(self):
         super().reset()
+        '''
+                Observation space initialization
+                '''
         self.x_lead = random.uniform(90, 110)
-        self.v_lead = random.uniform(32, 32.2)
+        self.v_lead = random.uniform(0, 32.2)
         self.a_lead = 0.0
-        self.x_ego = random.uniform(28, 38)
-        self.v_ego = random.uniform(25, 35)
+        self.x_ego = random.uniform(0, 58)
+        self.v_ego = random.uniform(self.v_lead - 5, self.v_lead + 5)
         self.a_ego = 0.0
         self.v_set = self.v_ego
-        self.a_c_lead = random.uniform(-3.0, -1.0)
+        self.a_c_lead = -2.0
         self.dt = 0.1
         self.t = 0
 
@@ -85,9 +116,10 @@ class CustomEnv(gym.Env):
         Parameters for calulating the rewards/costs
         '''
         self.D_Default = 10.0
-        self.T_Gap = 1.4
+        self.T_Gap = random.uniform(0.0, 3.0)
         self.D_rel = self.x_lead - self.x_ego
         self.D_safe = self.D_Default + self.T_Gap * self.v_ego
+
 
         return np.array([self.x_lead, self.x_ego, self.v_lead, self.v_ego, self.a_lead, self.a_ego,self.T_Gap, self.D_Default], dtype=np.float32), {}
 

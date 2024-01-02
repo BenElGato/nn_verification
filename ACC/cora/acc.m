@@ -2,10 +2,11 @@
 disp("ACC Environment")
 % ----------------Starting state definition----------%
 x_lead_min = 90
-x_lead_max = 110
+x_lead_max = 100
 
-x_ego_min = 50
-x_ego_max = 58
+x_ego_min = 11
+x_ego_max = 12
+
 
 v_lead_min = 32
 v_lead_max = 32.2
@@ -33,7 +34,7 @@ sampling_time = 0.1
 % Reachability Settings ---------------------------------------------------
 options.timeStep = 0.01;
 options.alg = 'lin';
-options.tensorOrder = 2; % Lower values reduce the computational burden
+options.tensorOrder = 2;
 options.taylorTerms = 1; % Lower values reduce the computational burden
 options.zonotopeOrder = 20; % Lowering the zonotope order reduces the number of cross terms and overall complexity of the zonotopes used in the analysis
 
@@ -58,10 +59,13 @@ f = @(x, u) [
     ];
 sys = nonlinearSys(f);
 % load neural network controller
-nn = neuralNetwork.readONNXNetwork('/home/benedikt/PycharmProjects/nn_verification/ACC/cora/network3.onnx');
+nn = neuralNetwork.readONNXNetwork('/home/benedikt/PycharmProjects/nn_verification/ACC/cora/network11.onnx');
 nn.evaluate(params.R0, evParams);
-
-nn.refine(2, "layer", "both", params.R0.c, true);
+num_refinements = 6
+%for i = 1:num_refinements
+ %   nn.refine(2, "layer", "both", params.R0.c, true);
+%end
+%nn.refine(2, "layer", "both", params.R0.c, true);
 
 
 % construct neural network controlled system
@@ -69,8 +73,9 @@ sys = neurNetContrSys(sys, nn, sampling_time);
 params.x0 = [x_lead_min;x_ego_min;v_lead_min;v_ego_min;a_lead_min;a_ego_min;T_Gap;D_Default]; % needed for simulation
 params.tStart = 0;% needed for simulation
 [t, x] = simulate(sys, params);
-
-simRes = simulateRandom(sys, params);
+opt = struct;
+opt.points = 50;
+simRes = simulateRandom(sys, params,opt);
 figure;
 hold on;
 
@@ -95,9 +100,9 @@ DM = [1 -1 0 0 0 0 0 0; %Real distance in first dimension
 Db = [0;D_Default;0;0;0;0;0;0]; % Moves second dimension up by D_default
 R_distances = DM * R + Db;
 
-plotOverTime(R_distances, 1, 'DisplayName', 'Distance', 'Unify', true);
+r1 = plotOverTime(R_distances, 1, 'DisplayName', 'Distance', 'Unify', true);
 
-plotOverTime(R_distances, 2, 'DisplayName', 'Desired distance', 'Unify', true);
+r2 = plotOverTime(R_distances, 2, 'DisplayName', 'Desired distance', 'Unify', true);
 isVeri = true;
 for i = 1:length(R_distances)
     for j = 1:length(R_distances(i).timeInterval.set)
@@ -120,14 +125,16 @@ for i = 1:length(simRes)
     simRes_i = simRes(i);
     distance = simRes_i.x{1,1}(:, 1) - simRes_i.x{1,1}(:, 2);
     target_distance = D_Default + T_Gap * simRes_i.x{1,1}(:,4);
-    plot(simRes_i.t{1,1}, distance(:, 1), 'b', 'DisplayName', 'Distance');
+    plot(simRes_i.t{1,1}, target_distance(:, 1), 'r');
+    plot(simRes_i.t{1,1}, distance(:, 1), 'b');
+    %plot(simRes_i.t{1,1}, simRes_i.x{1,1}(:, 6),'g')
 end
 
 
 xlabel('Time');
 ylabel('Distance');
 title('System Simulation and Reachability Analysis');
-legend('show');
+legend([r1, r2], "Reachable distance", "Reachable safe distance");
 axis([0, params.tFinal, 0, 130]); % Adjust the axis limits as needed
 
 hold off;
