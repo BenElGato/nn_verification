@@ -1,4 +1,3 @@
-
 import gymnasium as gym
 import sys
 import torch
@@ -59,7 +58,7 @@ def export_onnx(env, actor_model, batchsize, path):
 	#dummy_input = torch.randn(batchsize, obs_dim)
 	dummy_input = torch.randn(1, obs_dim)
 	print(dummy_input.size())
-	onnx_filename = f'{path}/actor_model_mountainCar.onnx'
+	onnx_filename = f'{path}/actor_model_mountainCarChanged.onnx'
 	torch.onnx.export(policy, dummy_input, onnx_filename, verbose=True, opset_version=10)
 
 if __name__ == '__main__':
@@ -82,13 +81,13 @@ if __name__ == '__main__':
 	critic_model = ""
 
 
-	#train(env=env, timesteps_per_batch=timesteps_per_batch, max_timesteps_per_episode=max_timesteps_per_episode,
-	#		gamma=gamma,n_updates_per_iteration=n_updates_per_iteration,lr=lr,clip=clip,
-	#	  	actor_model=actor_model, critic_model=critic_model, timesteps=1_000_000, name=name, entropy_coef=0.001)
+	train(env=env, timesteps_per_batch=timesteps_per_batch, max_timesteps_per_episode=max_timesteps_per_episode,
+			gamma=gamma,n_updates_per_iteration=n_updates_per_iteration,lr=lr,clip=clip,
+		  	actor_model=actor_model, critic_model=critic_model, timesteps=1_000_000, name=name, entropy_coef=0.001)
 
 
 	actor_model = f"{name}ppo_actor.pth"
-	env = gym.make(name, render_mode="human")
+	env = gym.make(name)
 	env = wrapper.CustomMountainCarRewardWrapper(env)
 	test(env=env, actor_model=actor_model)
-	#export_onnx(env,actor_model=actor_model,batchsize=timesteps_per_batch, path="/home/benedikt/PycharmProjects/nn_verification/mountaincar/cora")
+	export_onnx(env,actor_model=actor_model,batchsize=timesteps_per_batch, path="/Users/rayenmhadhbi/PycharmProjects/nn_verification/mountaincar/cora")
