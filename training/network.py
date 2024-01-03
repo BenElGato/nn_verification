@@ -213,6 +213,39 @@ class tanhNN(nn.Module):
 		activation2 = F.tanh(self.layer2(activation1))
 		output = 2.0 * F.tanh(self.layer3(activation2))
 
+class tinytanhNN(nn.Module):
+	def __init__(self, in_dim, out_dim, neurons):
+		super(tinytanhNN, self).__init__()
+
+		self.layer1 = nn.Linear(in_dim, neurons)
+		self.layer3 = nn.Linear(neurons, out_dim)
+
+	def forward(self, obs):
+		# Convert observation to tensor if it's a numpy array
+		if isinstance(obs, np.ndarray):
+			obs = torch.tensor(obs, dtype=torch.float)
+
+		activation1 = F.tanh(self.layer1(obs))
+		output = 2.0 * F.tanh(self.layer3(activation1))
+
+		return output
+class reluNN(nn.Module):
+	def __init__(self, in_dim, out_dim, neurons):
+		super(reluNN, self).__init__()
+
+		self.layer1 = nn.Linear(in_dim, neurons)
+		self.layer2 = nn.Linear(neurons, neurons)
+		self.layer3 = nn.Linear(neurons, out_dim)
+
+	def forward(self, obs):
+		# Convert observation to tensor if it's a numpy array
+		if isinstance(obs, np.ndarray):
+			obs = torch.tensor(obs, dtype=torch.float)
+
+		activation1 = F.relu(self.layer1(obs))
+		activation2 = F.relu(self.layer2(activation1))
+		output = 2.0 * F.tanh(self.layer3(activation2))
+
 		return output
 class sigmoidNN(nn.Module):
 	def __init__(self, in_dim, out_dim, neurons):

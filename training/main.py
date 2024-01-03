@@ -5,8 +5,7 @@ from gymnasium.envs.registration import register
 from matplotlib import pyplot as plt
 from onnx import numpy_helper
 
-from ACC.neural_network.network import tanhNN, RELU_NN, HeavyBrakes_RELU_NN
-from pendelum.neural_network.custom_environments.Angle import AngleWrapper
+from training.network import reluNN, tinytanhNN
 from training.ppo import PPO
 import torch
 import gymnasium as gym
@@ -127,29 +126,26 @@ register(
         id='ACCEnv',
         entry_point='ACC.neural_network.ACC_environment:CustomEnv',
     )
+register(
+        id='PendulumEnv',
+        entry_point='pendelum.neural_network.custom_environments.Custom_Pendulum:PendulumEnv',
+    )
 
 '''
 Declaration of the hyperparameters
 '''
-params = {'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99,
+params = {'neurons': 32, 'timesteps_per_batch': 5000, 'max_timesteps_per_episode': 500, 'gamma': 0.99,
 		  'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0,
-		  'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 7_000_000, 'neural_network': tanhNN}
+		  'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 7_000_000, 'neural_network': tinytanhNN}
 scenario = 'pendulum'
-render = True
 if scenario == 'acc':
 	env = gym.make("ACCEnv")
 	name = "ACCEnv"
-	obs_dim = env.observation_space.shape[0]
-	act_dim = env.action_space.shape[0]
 elif scenario == 'pendulum':
-	name = 'Pendulum-v1'
-	if render:
-		env = gym.make(name, render_mode="human")
-	else:
-		env = gym.make(name)
-	env = AngleWrapper(env)
-	obs_dim = 2
-	act_dim = env.action_space.shape[0]
+	env = gym.make("PendulumEnv")
+	name = "PendulumEnv"
+obs_dim = env.observation_space.shape[0]
+act_dim = env.action_space.shape[0]
 
 
 actor_model = ""
@@ -157,12 +153,12 @@ critic_model = ""
 
 settings = [params]
 
-test_onnx(env,"/home/benedikt/PycharmProjects/nn_verification/pendelum/cora/network.onnx",tanhNN,30,obs_dim,act_dim)
-#compare_settings(env,name, settings,"/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network", obs_dim=obs_dim,act_dim=act_dim)
+#test_onnx(env,"/home/benedikt/PycharmProjects/nn_verification/pendelum/cora/network.onnx",tanhNN,30,obs_dim,act_dim)
+compare_settings(env,name, settings,"/home/benedikt/PycharmProjects/nn_verification/pendelum/neural_network", obs_dim=obs_dim,act_dim=act_dim,counter=8)
 
-#actor_model = f"/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/ppo_actor11.pth"
+actor_model = f"/home/benedikt/PycharmProjects/nn_verification/pendelum/neural_network/ppo_actor8.pth"
 
-#test(env=env, actor_model=actor_model, neurons=params["neurons"], neural_network=params["neural_network"], obs_dim=obs_dim, act_dim=act_dim)
-#export_onnx(actor_model=actor_model, path="/home/benedikt/PycharmProjects/nn_verification/ACC/cora", neurons=params["neurons"], name="network11", nn=params["neural_network"], obs_dim=obs_dim,act_dim=act_dim)
+#test(env=env, actor_model=actor_model, neurons=params["neurons"], nn=params["neural_network"], obs_dim=obs_dim, act_dim=act_dim)
+export_onnx(actor_model=actor_model, path="/home/benedikt/PycharmProjects/nn_verification/pendelum/cora", neurons=params["neurons"], name="network8", nn=params["neural_network"], obs_dim=obs_dim,act_dim=act_dim)
 
 

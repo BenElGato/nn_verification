@@ -40,6 +40,7 @@ f = @(x, u) [
      x(2);
      ((3*g)/(2*l))*sin(x(1))+(3/(m*l^2)*u(1))
     ];
+nn = neuralNetwork.readONNXNetwork('/home/benedikt/PycharmProjects/nn_verification/pendelum/cora/network4.onnx');
 isVeri = true;
 while starting_angle >= -pi
     R0 = interval([starting_angle-0.05; thetadot], [starting_angle+0.05; thetadot]);
@@ -47,16 +48,16 @@ while starting_angle >= -pi
     params.R0 = polyZonotope(R0);
     sys = nonlinearSys(f);
     % load neural network controller
-    nn = neuralNetwork.readONNXNetwork('/home/benedikt/PycharmProjects/nn_verification/pendelum/cora/network.onnx');
+    
     nn.evaluate(params.R0, evParams);
     
-    nn.refine(2, "layer", "both", params.R0.c, true);
+    %nn.refine(2, "layer", "both", params.R0.c, true);
     
     
     % construct neural network controlled system
     sys = neurNetContrSys(sys, nn, sampling_time);
     % Specification -----------------------------------------------------------
-    safeSet = interval([0;-8.0], [allowed_angle;8.0]); % we want the angle to be in the upright position and don't care about velocity
+    safeSet = interval([-allowed_angle;-8.0], [allowed_angle;8.0]); % we want the angle to be in the upright position and don't care about velocity
     spec = specification(safeSet, 'safeSet', interval(1, 2));
     R = reach(sys, params, options, evParams);
         
@@ -65,7 +66,7 @@ while starting_angle >= -pi
            R_ij = R(i).timeInterval.set{j};
            theta = interval(project(R_ij, 1));
            if supremum(R(i).timeInterval.time{j,1}) > 3.5
-            isVeri = isVeri && (infimum(theta) > 0) && (supremum(theta) < allowed_angle);
+            isVeri = isVeri && (infimum(theta) > -allowed_angle) && (supremum(theta) < allowed_angle);
            end
            if ~ isVeri
                error("Stop")
