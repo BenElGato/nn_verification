@@ -17,8 +17,6 @@ m = 1.0 % mass of the pendulum
 l = 1.0 % lenght of the pendulum
 max_speed = 8.0
 min_speed = -max_speed
-max_torque = 2.0
-min_torque = -max_torque
 allowed_angle = 0.1
 
 % Reachability Settings ---------------------------------------------------
@@ -40,6 +38,8 @@ f = @(x, u) [
      x(2);
      ((3*g)/(2*l))*sin(x(1))+(3/(m*l^2)*u(1))
     ];
+network = 4
+display(network)
 nn = neuralNetwork.readONNXNetwork('/home/benedikt/PycharmProjects/nn_verification/pendelum/cora/network4.onnx');
 isVeri = true;
 while starting_angle >= -pi
@@ -88,12 +88,13 @@ while starting_angle >= -pi
     dim = 1
     % Plot Simulation Results
     r2 = plot(spec, [2 1])
-    r1 = plotOverTime(R, dim, 'DisplayName', 'Reachable set', 'Unify', true);
+    
     for i = 1:length(simRes)
                 simRes_i = simRes(i);
                 theta = simRes_i.x{1,1}(:, 1);
                 plot(simRes_i.t{1,1}, theta(:, 1), 'b');
     end
+    r1 = plotOverTime(R, dim, 'DisplayName', 'Reachable set', 'Unify', true);
     % Labels and Legend
     xlabel('Time');
     ylabel('Theta');

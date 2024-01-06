@@ -33,8 +33,8 @@ class PPO:
 		self.actor = policy_class(self.obs_dim, self.act_dim, params["neurons"])                                                   # ALG STEP 1
 		self.critic = policy_class(self.obs_dim, 1, params["neurons"])
 
-		#self.actor.load_state_dict(torch.load("/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/ppo_actor9.pth"))
-		#self.critic.load_state_dict(torch.load("/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/ppo_critic9.pth"))
+		#self.actor.load_state_dict(torch.load("/home/benedikt/PycharmProjects/nn_verification/pendelum/neural_network/ppo_actor4.pth"))
+		#self.critic.load_state_dict(torch.load("/home/benedikt/PycharmProjects/nn_verification/pendelum/neural_network/ppo_critic4.pth"))
 
 		# Initialize optimizers for actor and critic
 		self.actor_optim = Adam(self.actor.parameters(), lr=self.lr)

@@ -50,14 +50,20 @@ class PendulumEnv(gym.Env):
 
         u = np.clip(u, -self.max_torque, self.max_torque)[0]
         self.last_u = u  # for rendering
-        costs = angle_normalize(th) ** 2 + 0.1 * thdot**2 + 0.001 * (u**2)
-        rewards = -costs
-        if th % np.pi < 0.1 and abs(thdot < 0.01):
+
+        '''
+        if angle_normalize(th) % np.pi < 0.1 and abs(thdot < 0.01):
             rewards += 20
+            '''
 
         newthdot = thdot + (3 * g / (2 * l) * np.sin(th) + 3.0 / (m * l**2) * u) * dt
         newthdot = np.clip(newthdot, -self.max_speed, self.max_speed)
         newth = th + newthdot * dt
+
+        costs = angle_normalize(th) ** 2 + 0.1 * thdot ** 2 + 0.001 * (u ** 2)
+        rewards = -costs
+        if abs(angle_normalize(th)) < 0.1 and abs(thdot < 0.01):
+            rewards += 20
 
         self.state = np.array([newth, newthdot])
 

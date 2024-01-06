@@ -17,8 +17,6 @@ m = 1.0 % mass of the pendulum
 l = 1.0 % lenght of the pendulum
 max_speed = 8.0
 min_speed = -max_speed
-max_torque = 2.0
-min_torque = -max_torque
 allowed_angle = 0.1
 
 % Reachability Settings ---------------------------------------------------
@@ -40,7 +38,9 @@ f = @(x, u) [
      x(2);
      ((3*g)/(2*l))*sin(x(1))+(3/(m*l^2)*u(1))
     ];
-nn = neuralNetwork.readONNXNetwork('/home/benedikt/PycharmProjects/nn_verification/pendelum/cora/network7.onnx');
+network = 19
+display(network)
+nn = neuralNetwork.readONNXNetwork('/home/benedikt/PycharmProjects/nn_verification/pendelum/cora/network19.onnx');
 opt = struct;
 opt.points = 50;
 isVeri = true;
