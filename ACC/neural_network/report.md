@@ -1,375 +1,80 @@
-## Results for Setting 1
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph1.png)
 
-{'neurons': 30, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 3000000, 'neural_network': <class 'ACC.neural_network.network.tanhNN'>}
+# Tanh 32 networks
 
-## Results for Setting 1
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph1.png)
+## Results for Setting 22
+![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph22.png)
 
-{'neurons': 30, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 3000000, 'neural_network': <class 'ACC.neural_network.network.tanhNN'>}
+{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 7000000, 'neural_network': <class 'training.network.tanhNN'>}
+Learned behaviour but will have big problems with exploding sets, maybe a good demonstration
 
-## Results for Setting 1
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph1.png)
 
-{'neurons': 30, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 3000000, 'neural_network': <class 'ACC.neural_network.network.tanhNN'>}
 
-## Results for Setting 1
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph1.png)
+------------------------------------------------
+# RELU 16 networks
+## Results for Setting 26
+![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph26.png)
 
-{'neurons': 30, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 3000000, 'neural_network': <class 'ACC.neural_network.network.RELU_NN'>}
+{'neurons': 16, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 7000000, 'neural_network': <class 'training.network.RELUNN'>}
+--> Perfect behavior ;)
 
-## Results for Setting 1
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph1.png)
 
-{'neurons': 30, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 3000000, 'neural_network': <class 'ACC.neural_network.network.RELU_NN'>}
 
-## Results for Setting 1
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph1.png)
+-------------------------------------------------------------------
+# RELU 32 networks
+## Results for Setting 30
+![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph30.png)
 
-{'neurons': 30, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 3000000, 'neural_network': <class 'ACC.neural_network.network.RELU_NN'>}
+{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 7000000, 'neural_network': <class 'training.network.RELUNN'>}
+- works ;)
+## Results for Setting 32
+![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph32.png)
 
-## Results for Setting 1
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph1.png)
-
-{'neurons': 30, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 3000000, 'neural_network': <class 'ACC.neural_network.network.RELU_NN'>}
-
-## Results for Setting 1
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph1.png)
-
-{'neurons': 30, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 3000000, 'neural_network': <class 'ACC.neural_network.network.RELU_NN'>}
-
-## Results for Setting 1
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph1.png)
-
-{'neurons': 30, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 3000000, 'neural_network': <class 'ACC.neural_network.network.RELU_NN'>}
-
-## Results for Setting 1
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph1.png)
-
-{'neurons': 30, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 3000000, 'neural_network': <class 'ACC.neural_network.network.RELU_NN'>}
-
-## Results for Setting 1
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph1.png)
-
-{'neurons': 30, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.RELU_NN'>}
-
-## Results for Setting 1
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph1.png)
-
-{'neurons': 30, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.RELU_NN'>}
-
-## Results for Setting 1
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph1.png)
-
-{'neurons': 30, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.RELU_NN'>}
-
-## Results for Setting 1
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph1.png)
-
-{'neurons': 30, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.RELU_NN'>}
-
-## Results for Setting 1
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph1.png)
-
-{'neurons': 30, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.RELU_NN'>}
-
-## Results for Setting 1
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph1.png)
-
-{'neurons': 30, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.RELU_NN'>}
-
-## Results for Setting 1
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph1.png)
-
-{'neurons': 30, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.RELU_NN'>}
-
-## Results for Setting 1
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph1.png)
-
-{'neurons': 30, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.RELU_NN'>}
-
-## Results for Setting 1
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph1.png)
-
-{'neurons': 30, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.2, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.RELU_NN'>}
-
-## Results for Setting 1
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph1.png)
-
-{'neurons': 30, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.4, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.RELU_NN'>}
-
-## Results for Setting 1
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph1.png)
-
-{'neurons': 30, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.RELU_NN'>}
-
-## Results for Setting 2
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph2.png)
-
-{'neurons': 50, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.1, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 3000000, 'neural_network': <class 'ACC.neural_network.network.RELU_NN'>}
-
-## Results for Setting 2
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph2.png)
-
-{'neurons': 30, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.7, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 3000000, 'neural_network': <class 'ACC.neural_network.network.RELU_NN'>}
-
-## Results for Setting 2
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph2.png)
-
-{'neurons': 30, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 3000000, 'neural_network': <class 'ACC.neural_network.network.RELU_NN'>}
-
-## Results for Setting 2
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph2.png)
-
-{'neurons': 30, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 3000000, 'neural_network': <class 'ACC.neural_network.network.RELU_NN'>}
-
-## Results for Setting 2
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph2.png)
-
-{'neurons': 30, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.RELU_NN'>}
-
-## Results for Setting 2
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph2.png)
-
-{'neurons': 64, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.RELU_NN'>}
-
-## Results for Setting 2
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph2.png)
-
-{'neurons': 64, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.RELU_NN'>}
-
-## Results for Setting 2
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph2.png)
-
-{'neurons': 64, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.2, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.RELU_NN'>}
-
-## Results for Setting 2
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph2.png)
-
-{'neurons': 64, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.2, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.RELU_NN'>}
-
-## Results for Setting 2
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph2.png)
-
-{'neurons': 64, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.2, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.RELU_NN'>}
-
-## Results for Setting 4
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph4.png)
-
-{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.2, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.RELU_NN'>}
-
-## Results for Setting 5
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph5.png)
-
-{'neurons': 128, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.2, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.RELU_NN'>}
-
-## Results for Setting 5
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph5.png)
-
-{'neurons': 64, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.2, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.tanhNN'>}
-
-## Results for Setting 5
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph5.png)
-
-{'neurons': 64, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.2, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 5000000, 'neural_network': <class 'ACC.neural_network.network.tanhNN'>}
-
-## Results for Setting 5
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph5.png)
-
-{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.2, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.RELU_NN'>}
-
-## Results for Setting 5
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph5.png)
-
-{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.2, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.RELU_NN'>}
-
-## Results for Setting 6
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph6.png)
-
-{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.2, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.tanhNN'>}
-
-## Results for Setting 6
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph6.png)
-
-{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.2, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.tanhNN'>}
-
-## Results for Setting 6
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph6.png)
-
-{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.2, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.tanhNN'>}
-
-## Results for Setting 6
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph6.png)
-
-{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.2, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.tanhNN'>}
-
-## Results for Setting 6
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph6.png)
-
-{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.2, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.tanhNN'>}
-
-## Results for Setting 6
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph6.png)
-
-{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.2, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.tanhNN'>}
-
-## Results for Setting 6
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph6.png)
-
-{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.2, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.tanhNN'>}
-
-## Results for Setting 6
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph6.png)
-
-{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.2, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.tanhNN'>}
-
-## Results for Setting 6
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph6.png)
-
-{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.2, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.tanhNN'>}
-
-## Results for Setting 6
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph6.png)
-
-{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.2, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.tanhNN'>}
-
-## Results for Setting 6
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph6.png)
-
-{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.2, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 3000000, 'neural_network': <class 'ACC.neural_network.network.tanhNN'>}
-
-## Results for Setting 6
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph6.png)
-
-{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.2, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.tanhNN'>}
-
-## Results for Setting 6
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph6.png)
-
-{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.2, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.tanhNN'>}
-
-## Results for Setting 6
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph6.png)
-
-{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.2, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.tanhNN'>}
-
-## Results for Setting 6
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph6.png)
-
-{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.2, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 3000000, 'neural_network': <class 'ACC.neural_network.network.tanhNN'>}
-
-## Results for Setting 6
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph6.png)
-
-{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.2, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.tanhNN'>}
-
-## Results for Setting 6
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph6.png)
-
-{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.2, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.tanhNN'>}
-
-## Results for Setting 7
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph7.png)
-
-{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.2, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.tanhNN'>}
-
-## Results for Setting 7
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph7.png)
-
-{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.2, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.tanhNN'>}
-
-## Results for Setting 7
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph7.png)
-
-{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.2, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.HeavyBrakes_RELU_NN'>}
-
-## Results for Setting 7
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph7.png)
-
-{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.2, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.HeavyBrakes_RELU_NN'>}
-
-## Results for Setting 7
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph7.png)
-
-{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.2, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.HeavyBrakes_RELU_NN'>}
-
-## Results for Setting 7
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph7.png)
-
-{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.2, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.HeavyBrakes_RELU_NN'>}
-
-## Results for Setting 7
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph7.png)
-
-{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.2, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 1000000, 'neural_network': <class 'ACC.neural_network.network.HeavyBrakes_RELU_NN'>}
-
-## Results for Setting 7
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph7.png)
-
-{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 3000000, 'neural_network': <class 'ACC.neural_network.network.HeavyBrakes_RELU_NN'>}
-
+{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 7000000, 'neural_network': <class 'training.network.RELUNN'>}
+- Musterverhalten
 ## Results for Setting 8
 ![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph8.png)
 
-{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 3000000, 'neural_network': <class 'ACC.neural_network.network.HeavyBrakes_RELU_NN'>}
+{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 7000000, 'neural_network': RELUNN}
+--------------------------------------------------------------
+# Tanh 16 networks
+## Results for Setting 36
+![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph36.png)
 
-## Results for Setting 8
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph8.png)
+{'neurons': 16, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 7000000, 'neural_network': <class 'training.network.tanhNN'>}
+- Perfect behaviour
 
-{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 7000000, 'neural_network': <class 'ACC.neural_network.network.HeavyBrakes_RELU_NN'>}
+--------------------------------------------------------------------------------
+# TinyTanh 16 networks
 
-## Results for Setting 9
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph9.png)
+## Results for Setting 61
+![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph61.png)
 
-{'neurons': 256, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 7000000, 'neural_network': <class 'ACC.neural_network.network.HeavyBrakes_RELU_NN'>}
+{'neurons': 16, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 7000000, 'neural_network': <class 'training.network.tinytanhNN'>}
+- perfectooo :)
 
-## Results for Setting 9
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph9.png)
 
-{'neurons': 64, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 3000000, 'neural_network': <class 'ACC.neural_network.network.HeavyBrakes_RELU_NN'>}
+------------------------------------------------------------------------
+# TinyTanh 32 networks
 
-## Results for Setting 9
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph9.png)
+## Results for Setting 64
+![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph64.png)
 
-{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 3000000, 'neural_network': <class 'ACC.neural_network.network.HeavyBrakes_RELU_NN'>}
+{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 7000000, 'neural_network': <class 'training.network.tinytanhNN'>}
 
-## Results for Setting 9
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph9.png)
+# Hugetanhh 16
 
-{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 2000000, 'neural_network': <class 'ACC.neural_network.network.HeavyBrakes_RELU_NN'>}
 
-## Results for Setting 9
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph9.png)
+## Results for Setting 68
+![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph68.png)
 
-{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 2000000, 'neural_network': <class 'ACC.neural_network.network.HeavyBrakes_RELU_NN'>}
+{'neurons': 16, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 7000000, 'neural_network': <class 'training.network.hugetanhNN'>}
 
-## Results for Setting 9
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph9.png)
+- perfect
 
-{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 2000000, 'neural_network': <class 'ACC.neural_network.network.HeavyBrakes_RELU_NN'>}
+# Hugetanh 32
+## Results for Setting 70
+![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph70.png)
 
-## Results for Setting 9
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph9.png)
+{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 7000000, 'neural_network': <class 'training.network.hugetanhNN'>}
 
-{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 2000000, 'neural_network': <class 'ACC.neural_network.network.HeavyBrakes_RELU_NN'>}
-
-## Results for Setting 9
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph9.png)
-
-{'neurons': 16, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 2000000, 'neural_network': <class 'ACC.neural_network.network.HeavyBrakes_RELU_NN'>}
-
-## Results for Setting 10
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph10.png)
-
-{'neurons': 16, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 2000000, 'neural_network': <class 'ACC.neural_network.network.HeavyBrakes_RELU_NN'>}
-
-## Results for Setting 11
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph11.png)
-
-{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 2000000, 'neural_network': <class 'ACC.neural_network.network.tanhNN'>}
-
-## Results for Setting 11
-![Average Rewards Plot](/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/graph11.png)
-
-{'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 7000000, 'neural_network': <class 'ACC.neural_network.network.tanhNN'>}
-
+- perfect

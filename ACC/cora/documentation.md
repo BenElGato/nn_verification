@@ -86,28 +86,7 @@ Same as Network 8, but with 16 neurons a layer
 --> Less easy to verify, maybe because it is trained too short? Or less defined behaviour because of less neurons?
 ## Training of network 8
 ![Training](/home/benedikt/PycharmProjects/nn_verification/ACC/cora/graph9.png)
-    
-# Network 10
-Network 9, but longer trained
-## Problem a (Ego car starts between 50 and 58)
-![Verification](/home/benedikt/PycharmProjects/nn_verification/ACC/cora/network9a.jpg)
-## Problem b (Ego car start between 42 and 50)
-![Verification](/home/benedikt/PycharmProjects/nn_verification/ACC/cora/network9b.jpg)
-## Problem c (Ego car start between 34 and 42)
-![Verification](/home/benedikt/PycharmProjects/nn_verification/ACC/cora/network9c.jpg)
-## Problem d (Ego car start between 26 and 34)
-![Verification](/home/benedikt/PycharmProjects/nn_verification/ACC/cora/network9d.jpg)
-## Problem e (Ego car start between 18 and 26)
-![Verification](/home/benedikt/PycharmProjects/nn_verification/ACC/cora/network9e.jpg)
-## Problem f (Ego car start between 10 and 18)
-![Verification](/home/benedikt/PycharmProjects/nn_verification/ACC/cora/network9f.jpg)
-## Problem g (Ego car start between 0 and 10)
-![Verification](/home/benedikt/PycharmProjects/nn_verification/ACC/cora/network9g.jpg)
-## All problems in one verification:
-![Verification](/home/benedikt/PycharmProjects/nn_verification/ACC/cora/network9all.jpg)
---> Didn't get the beahviour really
-## Training of network 10
-![Training](/home/benedikt/PycharmProjects/nn_verification/ACC/cora/graph10.png)
+
 # Network 11
 3 tanh layers, 32 neurons
 ## Problem a (Ego car starts between 50 and 58)

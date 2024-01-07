@@ -7,7 +7,6 @@ from onnx import numpy_helper
 
 #from ACC.neural_network.network import tanhNN, RELU_NN, HeavyBrakes_RELU_NN, hugetanhNN
 from training.network import tanhNN, RELUNN, tinytanhNN, hugetanhNN
-from training.network import reluNN
 from training.ppo import PPO
 import torch
 import gymnasium as gym
@@ -136,19 +135,10 @@ register(
 '''
 Declaration of the hyperparameters
 '''
-params = {'neurons': 16, 'timesteps_per_batch': 5000, 'max_timesteps_per_episode': 500, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 7000000, 'neural_network': RELUNN}
+params = {'neurons': 32, 'timesteps_per_batch': 2048, 'max_timesteps_per_episode': 50, 'gamma': 0.99, 'n_updates_per_iteration': 18, 'dynamic_lr': True, 'lr': 0.003, 'clip': 0.3, 'entropy_coef': 0.0, 'gradient_clipping': True, 'max_grad_norm': 0.1, 'total_timesteps': 7_000_000, 'neural_network': hugetanhNN}
 
 
-
-
-
-
-
-
-
-
-
-scenario = 'pendulum'
+scenario = 'acc'
 
 if scenario == 'acc':
 	env = gym.make("ACCEnv")
@@ -166,11 +156,13 @@ critic_model = ""
 settings = [params]
 
 #test_onnx(env,"/home/benedikt/PycharmProjects/nn_verification/pendelum/cora/network.onnx",tanhNN,30,obs_dim,act_dim)
-compare_settings(env,name, settings,"/home/benedikt/PycharmProjects/nn_verification/pendelum/neural_network", obs_dim=obs_dim,act_dim=act_dim,counter=20)
+compare_settings(env,name, settings,"/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network", obs_dim=obs_dim,act_dim=act_dim,counter=75)
 
-actor_model = f"/home/benedikt/PycharmProjects/nn_verification/pendelum/neural_network/ppo_actor20.pth"
+
+
+actor_model = f"/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/ppo_actor75.pth"
 
 #test(env=env, actor_model=actor_model, neurons=params["neurons"], nn=params["neural_network"], obs_dim=obs_dim, act_dim=act_dim)
-export_onnx(actor_model=actor_model, path="/home/benedikt/PycharmProjects/nn_verification/pendelum/cora", neurons=params["neurons"], name="network20", nn=params["neural_network"], obs_dim=obs_dim,act_dim=act_dim)
+export_onnx(actor_model=actor_model, path="/home/benedikt/PycharmProjects/nn_verification/ACC/cora", neurons=params["neurons"], name="network75", nn=params["neural_network"], obs_dim=obs_dim,act_dim=act_dim)
 
 
