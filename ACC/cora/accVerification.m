@@ -1,20 +1,55 @@
 % ------------------------------ BEGIN CODE -------------------------------
 disp("ACC Environment")
-veri(26);
-veri(32);
-veri(36);
-veri(61);
-veri(64);
-veri(68);
-veri(70);
-% ----------------Starting state definition----------%
-function veri(network_number)
+x_ego_maximum = 2; % int | x_ego_min < x:ego_maximum < 90
+x_ego_min = 0; % int
+veri(36, x_ego_maximum, x_ego_min, true, sprintf("test.csv"));
+
+% Verification function for an adapted version of the ACC Benchmark from 
+% the ARCH Competition
+% Lopez, Diego Manzanas, et al. "ARCH-COMP23 Category Report: Artificial Intelligence 
+% and Neural Network Control Systems (AINNCS) for Continuous and Hybrid Systems Plants." 
+% Proceedings of 10th International Workshop on Applied. Vol. 96. 2023.
+% The adaption to the benchmark is that the possible starting states of the
+% RL controlled car can be verified with the input. The system checks
+% whether the safe distance between the 2 cars get violated.
+%Arguments
+%--------------------------------------------------------------------------
+%- network_number: int, verification will use network{network_number}.onnx
+% and write results into csv_file
+
+%- x_ego_minimum = float, Defines the minimal possible starting position of the RL controlled car
+
+% %- x_ego_maximum = float, Defines the maximal possible starting position of the RL controlled car
+
+% - do_plotting: Boolean, set true for plotting graphs. Simulations are
+% just plotted and checked if set wasn not verifiable with reachability
+% analysis to save computational ressources
+
+%-allowed_angle: The function checks whether the network will bring the
+%pendulum into an upright position, with fault tolerance of |desired_angle|
+%--> If desired_angle = 0.1, the system will pass the tests if the angle is
+%between (-0.1,0.1) after t=3.5
+
+%-csv_file: Path to the csv file the results should be stored in
+%--------------------------------------------------------------------------
+% Results
+%--------------------------------------------------------------------------
+%- Results will be stored in csv file
+%- The first cell will be the result for the first sub-initialset, the 2.
+%one for the 2.,........
+%- A 1 means it was verified with reachability analysis
+%- A 0 means it was not verified with reachability analysis but the
+%simulations showed no violations, indicating that this subset could be
+%verified with less aproximation errors in the reachability analysis or
+%exploding sets
+%- A -1 means that the reachability analysis detected violations of the
+%specifications
+function veri(network_number,x_ego_maximum, x_ego_min,do_plotting, csv_file)
     x_lead_min = 90
     x_lead_max = 100
     
-    x_ego_min = 0
-    x_ego_max = 1
     
+    x_ego_max = x_ego_min + 1;
     
     v_lead_min = 32
     v_lead_max = 32.2
@@ -33,26 +68,21 @@ function veri(network_number)
     
     a_c_lead = -2.0
     
-    % Adjust this to expand the tested x_egos
-    x_ego_maximum = 58
-    
-    
     % Reachability Settings ---------------------------------------------------
     options.timeStep = 0.01;
     options.alg = 'lin';
-    options.tensorOrder = 3; % Lower values reduce the computational burden
+    options.tensorOrder = 3; 
     options.errorOrder = 20;
     options.intermediateOrder = 20;
-    options.taylorTerms = 1; % Lower values reduce the computational burden
-    options.zonotopeOrder = 20; % Lowering the zonotope order reduces the number of cross terms and overall complexity of the zonotopes used in the analysis
+    options.taylorTerms = 1; 
+    options.zonotopeOrder = 20; 
     
     % Parameters for NN evaluation --------------------------------------------
-    % TODO Splitting
     evParams = struct;
     evParams.poly_method = 'regression';
     evParams.bound_approx = true;
     evParams.reuse_bounds = false;
-    evParams.num_generators = 100000
+    evParams.num_generators = 100000;
     
     % System Dynamics ---------------------------------------------------------
     f = @(x, u) [
@@ -65,10 +95,11 @@ function veri(network_number)
          0;
          0;
         ];
+    p = sprintf('network%d.onnx', network_number)
+    nn = neuralNetwork.readONNXNetwork(p);
 
-
-    results = ones(4,x_ego_maximum);
-    results = -10 * ones
+    results = ones(4,(x_ego_maximum-x_ego_min));
+    results = -10 * results;
     
     while x_ego_max <= x_ego_maximum
         x_lead_min = 90
@@ -82,29 +113,23 @@ function veri(network_number)
             params.tFinal = 5;
             params.R0 = polyZonotope(R0);
             sampling_time = 0.1
-            % load neural network controller
             
-            p = sprintf('/home/benedikt/PycharmProjects/nn_verification/ACC/cora/network%d.onnx', network_number)
-            nn = neuralNetwork.readONNXNetwork(p);
             nn.evaluate(params.R0, evParams);
             sys = nonlinearSys(f);
             sys = neurNetContrSys(sys, nn, sampling_time);
             params.x0 = [x_lead_min;x_ego_min;v_lead_min;v_ego_min;a_lead_min;a_ego_min;T_Gap;D_Default]; % needed for simulation
-            params.tStart = 0;% needed for simulation
+            params.tStart = 0;
             [t, x] = simulate(sys, params);
             opt = struct;
             opt.points = 50;
-            simRes = simulateRandom(sys, params,opt);
             
-            %figure;
-            %hold on;
             
             
             distance = x(:, 1) - x(:, 2);
             target_distance = D_Default + T_Gap * x(:,4);
             unsafeSet = specification(interval([0.0, 0.0], [params.tFinal, 20.0]), 'unsafeSet');
             
-            R = reach(sys, params, options, evParams);
+            [R,res] = reach(sys, params, options, evParams);
             C = [-1]
             
             DM = [1 -1 0 0 0 0 0 0; %Real distance in first dimension
@@ -118,66 +143,72 @@ function veri(network_number)
                 ] 
             Db = [0;D_Default;0;0;0;0;0;0]; % Moves second dimension up by D_default
             R_distances = DM * R + Db;
-            
-            %r1 = plotOverTime(R_distances, 1, 'DisplayName', 'Distance', 'Unify', true);
-            
-            %r2 = plotOverTime(R_distances, 2, 'DisplayName', 'Desired distance', 'Unify', true);
-            
-            % Plot simulations
-            %for i = 1:length(simRes)
-             %   simRes_i = simRes(i);
-              %  distance = simRes_i.x{1,1}(:, 1) - simRes_i.x{1,1}(:, 2);
-               % target_distance = D_Default + T_Gap * simRes_i.x{1,1}(:,4);
-                %plot(simRes_i.t{1,1}, target_distance(:, 1), 'r');
-                %plot(simRes_i.t{1,1}, distance(:, 1), 'b');
-            %end
-            
-            
-            for i = 1:length(R_distances)
-                for j = 1:length(R_distances(i).timeInterval.set)
-                        % read distances
-                        R_ij = R_distances(i).timeInterval.set{j};
-                        distance = interval(project(R_ij, 1));
-                        safe_distance = interval(project(R_ij, 2));
-            
-                         %check safety
-                        tp = supremum(R_distances(i).timeInterval.time{j,1});
-                        if supremum(R_distances(i).timeInterval.time{j,1}) > 3.5
-                            isVeri = isVeri && (infimum(distance) > supremum(safe_distance));
-                        end
-                        if ~ isVeri
-                            display(supremum(R_distances(i).timeInterval.time{j,1}))
-                            display(x_ego_min)
-                            display(x_ego_max)
-                            display(x_lead_min)
-                           display(x_lead_min)
-                            %error("Stop")
-                        end
-                 end
+        
+            %--------------------------------------------------------------
+            % Check reachable set if set didnt explode
+            if res == 1
+                for i = 1:length(R_distances)
+                    for j = 1:length(R_distances(i).timeInterval.set)
+                            R_ij = R_distances(i).timeInterval.set{j};
+                            distance = interval(project(R_ij, 1));
+                            safe_distance = interval(project(R_ij, 2));
+                            tp = supremum(R_distances(i).timeInterval.time{j,1});
+                            if supremum(R_distances(i).timeInterval.time{j,1}) > 3.5
+                                isVeri = isVeri && (infimum(distance) > supremum(safe_distance));
+                            end
+                            if ~isVeri
+                                break
+                            end
+                     end
+                end
+            else
+                isVeri = false
             end
-            for i = 1:length(simRes)
-                simRes_i = simRes(i);
-                distance = simRes_i.x{1,1}(:, 1) - simRes_i.x{1,1}(:, 2);
-                target_distance = D_Default + T_Gap * simRes_i.x{1,1}(:,4);
-                %plot(simRes_i.t{1,1}, target_distance(:, 1), 'r');
-                %plot(simRes_i.t{1,1}, distance(:, 1), 'b');
-                for j = 1:length(simRes(i).t{1,1})
-                    time = simRes_i.t{1,1}(j,1)
-                    if simRes_i.t{1,1}(j,1) > 3.5
-                        distance = simRes_i.x{1,1}(j, 1) - simRes_i.x{1,1}(j, 2);
-                        target_distance = D_Default + T_Gap * simRes_i.x{1,1}(j,4);
-                        simVeri = simVeri && distance >= target_distance;
+            %--------------------------------------------------------------
+
+            if do_plotting
+                figure;
+                hold on;
+                r1 = plotOverTime(R_distances, 1, 'DisplayName', 'Distance', 'Unify', true);
+                r2 = plotOverTime(R_distances, 2, 'DisplayName', 'Desired distance', 'Unify', true);
+            end
+            %-------------------------------------------------------------
+            % Check simulations if set could not be verified 
+            if ~isVeri
+                simRes = simulateRandom(sys, params,opt);
+                for i = 1:length(simRes)
+                    simRes_i = simRes(i);
+                    distance = simRes_i.x{1,1}(:, 1) - simRes_i.x{1,1}(:, 2);
+                    target_distance = D_Default + T_Gap * simRes_i.x{1,1}(:,4);
+                    if do_plotting
+                        plot(simRes_i.t{1,1}, target_distance(:, 1), 'r');
+                        plot(simRes_i.t{1,1}, distance(:, 1), 'b');
+                    end
+                    
+                    for j = 1:length(simRes(i).t{1,1})
+                        time = simRes_i.t{1,1}(j,1);
+                        if simRes_i.t{1,1}(j,1) > 3.5
+                            distance = simRes_i.x{1,1}(j, 1) - simRes_i.x{1,1}(j, 2);
+                            target_distance = D_Default + T_Gap * simRes_i.x{1,1}(j,4);
+                            simVeri = simVeri && distance >= target_distance;
+                        end
                     end
                 end
             end
-            %xlabel('Time');
-            %ylabel('Distance');
-            %str = sprintf('Ego min: %f, Ego max: %f, Lead min: %f, Lead max: %f, Verified: %f', x_ego_min, x_ego_max, x_lead_min, x_lead_max, isVeri);
-            %title(str);
-            %legend([r1, r2], "Reachable distance", "Reachable safe distance");
-            %axis([0, params.tFinal, 0, 130]); % Adjust the axis limits as needed
+            %--------------------------------------------------------------
+            if do_plotting
+                
+                xlabel('Time');
+                ylabel('Distance');
+                str = sprintf('Ego min: %f, Ego max: %f, Lead min: %f, Lead max: %f, Verified: %f', x_ego_min, x_ego_max, x_lead_min, x_lead_max, isVeri);
+                title(str);
+                legend([r1, r2], "Reachable distance", "Reachable safe distance");
+                axis([0, params.tFinal, 0, 130]);
+                hold off;
+            end
             
-            %hold off;
+            
+            
             
             if ~simVeri
                 results(pos,x_ego_max ) = -1
@@ -197,8 +228,7 @@ function veri(network_number)
         x_ego_min = x_ego_min + 1
         x_ego_max = x_ego_max + 1
     end
-    filename = sprintf('/home/benedikt/PycharmProjects/nn_verification/ACC/cora/results%d.xlsx',network_number);
-    xlswrite(filename, results);
+    xlswrite(csv_file, results);
 end
 
 
