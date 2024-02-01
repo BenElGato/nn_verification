@@ -1,11 +1,11 @@
 % ------------------------------ BEGIN CODE -------------------------------
-max_angle =  pi;
+max_angle =  pi ;
 min_angle = -pi;
-step_size = (pi / 64);
+step_size = 2* pi;
 allowed_angle = 0.1;
-network = 5;
-csv_file = sprintf("network%d.csv", network)
-veri(network, max_angle, min_angle, step_size, false, allowed_angle, csv_file)
+network = 8;
+csv_file = sprintf("network%dq.csv", network)
+veri(network, max_angle, min_angle, step_size, true, allowed_angle, csv_file)
 % Verification function for an adapted version of the pendulum gymnasium
 % environment. Obersvation space:[Theta, Thetadot]
 %Arguments
@@ -63,8 +63,8 @@ function veri(network_number, starting_angle,min_angle, step_size, do_plotting,a
     options.alg = 'lin';
     options.tensorOrder = 2; 
     options.taylorTerms = 1; 
-    options.zonotopeOrder = 80;  
-    %----------------------------------------------------------------------
+    options.zonotopeOrder = 80;
+%----------------------------------------------------------------
     % Parameters for NN evaluation
     evParams = struct;
     evParams.poly_method = 'regression';
@@ -97,7 +97,7 @@ function veri(network_number, starting_angle,min_angle, step_size, do_plotting,a
         safeSet = interval([-allowed_angle;-8.0], [allowed_angle;8.0]); 
         spec = specification(safeSet, 'safeSet', interval(1, 2));
         [R,res] = reach(sys, params, options, evParams);
-
+       
         
         %------------------------------------------------------------------ 
         % Check reachability analysis results
@@ -155,25 +155,24 @@ function veri(network_number, starting_angle,min_angle, step_size, do_plotting,a
                         end
             end
         end
-        %--------------------------------------------------------------
-        display(simVeri)
-        
+        %--------------------------------------------------------------  
         if do_plotting
             xlabel('Time');
             ylabel('Theta');
             title('System Simulation and Reachability Analysis');
             axis([0, params.tFinal, -pi, pi]); 
             legend([r1, r2], "Reachable Angle", "Desired angle");
+            %matlab2tikz();
             hold off;
         end
         if ~simVeri
-                    results(1,pos) = -1
+                    results(1,pos) = -1;
                 else
                     if ~isVeri
-                        results(1, pos) = 0
+                        results(1, pos) = 0;
                     else
                         results(1, pos) = 1
-                        verified_tests = verified_tests + 1
+                        verified_tests = verified_tests + 1;
                     end
         end
         

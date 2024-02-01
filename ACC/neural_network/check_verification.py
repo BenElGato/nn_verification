@@ -4,7 +4,8 @@ import numpy as np
 from matplotlib.colors import ListedColormap
 
 # Load the CSV file
-file_path = '/home/benedikt/PycharmProjects/nn_verification/ACC/cora/results.csv'
+network = 70
+file_path = f'/home/benedikt/PycharmProjects/nn_verification/ACC/cora/network{network}a.csv'
 df = pd.read_csv(file_path, header=None)
 
 def validate_values(df):
@@ -25,5 +26,5 @@ plt.yticks(np.arange(-0.5, len(df), 1), [])
 plt.grid(which='major', axis='both', linestyle='-', color='k', linewidth=2)
 plt.tick_params(axis='both', which='both', length=0)
 
-plt.savefig('/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/results30a.png' )
+plt.savefig(f'/home/benedikt/PycharmProjects/nn_verification/ACC/neural_network/benchmark/a/network{network}a.png' )
 
