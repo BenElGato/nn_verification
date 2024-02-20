@@ -1,8 +1,17 @@
 allowed_angle = 0.1;
-network = 1;
-veri(network, false, allowed_angle)
-
-function veri(network_number, do_plotting,allowed_angle)
+network = 4;
+display(veri(network, false, allowed_angle))
+% Calculates the percentage of the search space that was verifiable with
+% our dynamic approach. 
+% Inputs: 
+% - network: int, verification will use network{network_number}.onnx in the
+% same folder
+% - do_plotting: Boolean, set true for plotting graphs. 
+%-allowed_angle: The function checks whether the network will bring the
+%pendulum into an upright position, with fault tolerance of |allowed_angle|
+%--> If allowed_angle = 0.1, the system will pass the tests if the angle is
+%between (-0.1,0.1) after t=3.5
+function score = veri(network_number, do_plotting,allowed_angle)
     thetadot = 0;
     params.tFinal = 5;
     sampling_time = 0.01;
@@ -30,22 +39,22 @@ function veri(network_number, do_plotting,allowed_angle)
          ((3*g)/(2*l))*sin(x(1))+(3/(m*l^2)*u(1))
         ];  
     %----------------------------------------------------------------------
-    smallest_size = (pi / 128)
+    smallest_size = (pi / 128);
     number_of_tests = (2 * pi) / smallest_size;
     number_of_tests = ceil(number_of_tests - 0.0001);
     verified_tests = 0;
     nn = neuralNetwork.readONNXNetwork(sprintf('network%d.onnx',network_number));
-    starting_angle = pi
-    min_angle = -pi
+    starting_angle = pi;
+    min_angle = -pi;
     while starting_angle > min_angle
         isVeri = true;
-        res = 0
-        step_size = 4 * pi
+        res = 0;
+        step_size = 4 * pi;
         
         while res ~= 1 & step_size >= smallest_size
             step_size = step_size / 2;
             while starting_angle - step_size < -pi
-                step_size = step_size / 2
+                step_size = step_size / 2;
             end
             R0 = interval([starting_angle-step_size; thetadot], [starting_angle; thetadot])
             params.tFinal = 5;
@@ -74,7 +83,7 @@ function veri(network_number, do_plotting,allowed_angle)
                end
             end
         else
-            isVeri = false
+            isVeri = false;
         end
         
         dim = 1;
@@ -89,17 +98,24 @@ function veri(network_number, do_plotting,allowed_angle)
             title('System Simulation and Reachability Analysis');
             axis([0, params.tFinal, -pi, pi]); 
             legend([r1, r2], "Reachable Angle", "Desired angle");
-            %matlab2tikz();
             hold off;
         end
         
          if isVeri
-             display("Verified size")
-             display(step_size)
-             display("Verified tests")
-             display((step_size / smallest_size))
-            verified_tests = verified_tests + (step_size / smallest_size)
+            verified_tests = verified_tests + (step_size / smallest_size);
          end
     end
-    score = verified_tests / number_of_tests
+    isEqual = checkAngleEquality(starting_angle, min_angle, 1e-10);
+    if isEqual
+        disp('The starting angle and minimum angle are equal within the tolerance.');
+    else
+        error('The starting angle and minimum angle are not equal within the tolerance.');
+    end
+    
+        score = verified_tests / number_of_tests;
+    end
+
+
+function areEqual = checkAngleEquality(start_angle, min_angle, tolerance)
+    areEqual = abs(start_angle - min_angle) < tolerance;
 end
