@@ -20,8 +20,9 @@ class YourClass:
         policy.load_state_dict(torch.load(actor_model))
 
         dummy_input = torch.randn(1, obs_dim)
-        onnx_filename = f'{actor_model}/network{name}.onnx'
-        torch.onnx.export(policy, dummy_input, onnx_filename, verbose=True, opset_version=10)
+        onnx_filename = f'network{name}.onnx'
+        torch.onnx.export(policy, dummy_input, onnx_filename, verbose=False, opset_version=10)
+        print("Trained and exported neural network!")
 
     def train_network(self, params_file, environment, nn_name):
         # Load params from the text file
@@ -48,34 +49,28 @@ class YourClass:
         self.compare_settings(env, name, params, current_directory, obs_dim, act_dim, nn_name)
 
         # Export ONNX
-        actor_model = current_directory  # Path to the current directory
-        neurons = params[0].get('neurons')  # Neurons from the first set of parameters
+        actor_model = f"ppo_actor_{nn_name}.pth"
+        neurons = params[0].get('neurons')
         self.export_onnx(actor_model, neurons, nn_name, params[0]["neural_network"], obs_dim, act_dim)
 
     def compare_settings(self, env, name, settings, path, obs_dim, act_dim, nn_name):
-        counter = 1
-        for i in settings:
-            model = PPO(policy_class=i["neural_network"], env=env, name=name, params=i, path=path, counter=counter, obs_dim=obs_dim, act_dim=act_dim)
-            average_rewards = model.learn()
-            print("")
+        model = PPO(policy_class=settings[0]["neural_network"], env=env, name=name, params=settings[0], path=path, counter=nn_name, obs_dim=obs_dim, act_dim=act_dim)
+        average_rewards = model.learn()
+        print("")
+        plt.plot(average_rewards, label=f"{nn_name}. settings")
+        plt.legend()
+        plt.title('Average Episodic Returns Over Iterations')
+        plt.xlabel('Iteration')
+        plt.ylabel('Average Return')
+        plt.savefig(f'{path}/graph{nn_name}.png')
+        plt.close()
 
-            plt.plot(average_rewards, label=f"{counter}. settings")
-            plt.legend()
-            plt.title('Average Episodic Returns Over Iterations')
-            plt.xlabel('Iteration')
-            plt.ylabel('Average Return')
-            plt.savefig(f'{path}/graph{counter}.png')
-            plt.close()
-            with open(f'{path}/report.md', 'a') as file:
-                file.write(f"## Results for Setting {counter}\n")
-                file.write(f"![Average Rewards Plot]({path}/graph{counter}.png)\n\n")
-                file.write(f"{str(i)}\n\n")
-            counter += 1
-'''
-Registration of the custom environments........................
-'''
+
 
 def main():
+    '''
+    Registration of the custom environments........................
+    '''
     sys.path.append("..")
     register(
         id='ACCEnv',

@@ -2,7 +2,7 @@
 % Adjust x_ego starting space (should be integers from the interval [0,58])
 x_ego_maximum = 21; 
 x_ego_min = 20;
-network = 4;
+network = 8;
 display(veri(network, x_ego_maximum, x_ego_min, true));
 % Verifies whether the neural network controlled car keeps a safe distance
 % to the car in front and also does not slow down unnecessarily. The

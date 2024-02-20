@@ -103,8 +103,8 @@ class PPO:
 
 
 			self._log_summary()
-			torch.save(self.actor.state_dict(), f'{self.path}/ppo_actor{self.counter}.pth')
-			torch.save(self.critic.state_dict(), f'{self.path}/ppo_critic{self.counter}.pth')
+			torch.save(self.actor.state_dict(), f'{self.path}/ppo_actor_{self.counter}.pth')
+			torch.save(self.critic.state_dict(), f'{self.path}/ppo_critic_{self.counter}.pth')
 		return self.avg_ep_rews_history
 
 	def collectData(self):
